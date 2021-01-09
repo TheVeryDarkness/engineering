@@ -6,11 +6,11 @@
 #include <string_view>
 namespace structure {
 namespace fundamental {
-// 有效数字需要足够宽，以防止乘法上溢
+// 鏈夋晥鏁板瓧闇�瑕佽冻澶熷锛屼互闃叉涔樻硶涓婃孩
 template <                                   //
-    typename valid_number_t = std::intmax_t, // 有效数值的类型
-    typename digits_t = std::int_fast8_t,    // 小数点位数的类型
-    digits_t max_valid_digits = 4            // 有效位数
+    typename valid_number_t = std::intmax_t, // 鏈夋晥鏁板�肩殑绫诲瀷
+    typename digits_t = std::int_fast8_t,    // 灏忔暟鐐逛綅鏁扮殑绫诲瀷
+    digits_t max_valid_digits = 4            // 鏈夋晥浣嶆暟
     >
 class unsigned_number {
   valid_number_t valid_number;
@@ -39,7 +39,7 @@ class unsigned_number {
       num /= 10, ++d;
     return d;
   }
-  // digits应该大于0
+  // digits搴旇澶т簬0
   void div_10_for(digits_t digits) {
     assert(digits > 0);
     valid_number /= pow10(digits);

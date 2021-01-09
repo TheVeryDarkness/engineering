@@ -4,7 +4,7 @@
  */
 namespace structure {
 namespace concrete {
-class µ¥½î½ØÃæ {
+class å•ç­‹æˆªé¢ {
 
 };
 } // namespace concrete

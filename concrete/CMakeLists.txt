@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 project("structure.concrete" LANGUAGES "CXX")
 set(CMAKE_CXX_STANDARD 17)
+add_executable("axis_test" "tests/axis_test.cpp")
+add_test(NAME "axis_test" COMMAND "axis_test")

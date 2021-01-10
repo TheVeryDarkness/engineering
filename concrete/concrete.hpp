@@ -3,11 +3,16 @@
  */
 #pragma once
 #include "../fundamental/number.hpp"
+#include <optional>
 namespace structure {
 namespace concrete {
+using num = typename fundamental::unsigned_number;
+using opt = std::optional<num>;
+template <typename callback> static inline num fetch_opt(opt &o, callback cb) {
+  return o.has_value() ? o.value() : (o = cb(), o.value());
+}
 class concrete {
 protected:
-  using num = typename fundamental::unsigned_number;
   // p.22 2-4
   static num fcuk_to_fck(num::valid_number_t fcuk) {
     using namespace fundamental;
@@ -35,15 +40,16 @@ public:
 };
 class rebar {
 protected:
-  using num = typename fundamental::unsigned_number;
-  num Es, fy, fsu;
+  num Es, fy;
+  opt fy_, fsu;
 
 public:
-  rebar(num Es, num fy, num fsu) : Es(Es), fy(fy), fsu(fsu) {}
+  rebar(num Es, num fy, opt fy_ = {}, opt fsu = {})
+      : Es(Es), fy(fy), fy_(fy_), fsu(fsu) {}
 };
 class single_rebar_rectangle_section : public concrete, rebar {
-  using num = typename fundamental::unsigned_number;
-  num As, A;
+  const num As, A;
+  mutable opt _alphaE, _rho;
   static num CalcA(num b, num h, num As) {
     num A = b * h;
     if (As > A * num(3, 2))
@@ -54,11 +60,39 @@ class single_rebar_rectangle_section : public concrete, rebar {
 public:
   single_rebar_rectangle_section(num b, num h, num As, concrete c, rebar s)
       : As(As), A(CalcA(b, h, As)), concrete(c), rebar(s) {}
-  num alphaE() const { return this->rebar::Es / this->concrete::Ec; }
-  num rho() const { return As / A; }
-  num Ntcr() const {
-    return this->concrete::ft * A * (num::exact(1) + alphaE() * rho());
+  const concrete &c() const { return *this; }
+  const rebar &r() const { return *this; }
+  num alphaE() const {
+    return fetch_opt(_alphaE, [this] { return Es / Ec; });
   }
+  num rho() const {
+    return fetch_opt(_rho, [this] { return As / A; });
+  }
+  // p.49 4-5
+  num Ntcr() const { return ft * A * (num::exact(1) + alphaE() * rho()); }
+  // p.49 4-7
+  num Ntu() const { return fy * As; }
+  // p.53 4-20
+  num Ncu() const { return fc * A + fy_.value() * As; }
+  // p.53 4-25
+  num sigma_s2(num Nc, num nu, num Ct) {
+    return Nc * (num::exact(1) + Ct) / (num::exact(1) + nu / alphaE() / rho()) /
+           As;
+  }
+  // p.54 4-26
+  num sigma_c2(num Nc, num nu, num Ct) {
+    return Nc / A *
+           (num::exact(1) - alphaE() * (num::exact(1) + Ct) * As / nu / A /
+                                (num::exact(1) + alphaE() / nu * rho()));
+  }
+};
+class single_rebar_rectangle_column : public single_rebar_rectangle_section {
+  num l;
+
+public:
+  single_rebar_rectangle_column(num length, single_rebar_rectangle_section sec)
+      : l(length), single_rebar_rectangle_section(sec) {}
+  static num phi();
 };
 } // namespace concrete
 } // namespace structure

@@ -21,6 +21,7 @@ protected:
                      : num(100 - 87, 2) / num(80 - 40, 2) * num(fcuk - 40);
     return num(88, 2) * alpah1 * alpha2 * num(fcuk);
   }
+  static num fck_to_fc(num fck) { return fck / num(14, 1); }
 
   num Ec, epsilon_0, epsilon_cu;
 

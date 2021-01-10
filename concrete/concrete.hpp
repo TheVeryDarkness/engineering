@@ -16,16 +16,15 @@ protected:
   // p.22 2-4
   static num fcuk_to_fck(num::valid_number_t fcuk) {
     using namespace fundamental;
-    num alpah1 = fcuk <= 50
-                     ? "0.76"_num              // 0.76
-                     : fcuk >= 80 ? "0.82"_num // 0.82
-                                  : num(fcuk - 50) *
-                                        "0.002"_num // (0.82 - 0.76) / (80 - 50)
+    num alpah1 = fcuk <= 50 ? "0.76"_num // 0.76
+                 : fcuk >= 80
+                     ? "0.82"_num                   // 0.82
+                     : num(fcuk - 50) * "0.002"_num // (0.82 - 0.76) / (80 - 50)
         ;
-    num alpha2 = fcuk <= 40 ? "1.00"_num              // 1.00
-                            : fcuk >= 80 ? "0.87"_num // 0.87
-                                         : num(100 - 87, 2) / num(80 - 40, 2) *
-                                               num(fcuk - 40);
+    num alpha2 = fcuk <= 40 ? "1.00"_num // 1.00
+                 : fcuk >= 80
+                     ? "0.87"_num // 0.87
+                     : num(100 - 87, 2) / num(80 - 40, 2) * num(fcuk - 40);
     return num(88, 2) * alpah1 * alpha2 * num(fcuk);
   }
   // p.22
@@ -47,7 +46,7 @@ public:
   rebar(num Es, num fy, opt fy_ = {}, opt fsu = {})
       : Es(Es), fy(fy), fy_(fy_), fsu(fsu) {}
 };
-class single_rebar_rectangle_section : public concrete, rebar {
+class longitudinal_rebar_rectangle_section : public concrete, rebar {
   const num As, A;
   mutable opt _alphaE, _rho;
   static num CalcA(num b, num h, num As) {
@@ -58,7 +57,8 @@ class single_rebar_rectangle_section : public concrete, rebar {
   }
 
 public:
-  single_rebar_rectangle_section(num b, num h, num As, concrete c, rebar s)
+  longitudinal_rebar_rectangle_section(num b, num h, num As, concrete c,
+                                       rebar s)
       : As(As), A(CalcA(b, h, As)), concrete(c), rebar(s) {}
   const concrete &c() const { return *this; }
   const rebar &r() const { return *this; }
@@ -86,13 +86,20 @@ public:
                                 (num::exact(1) + alphaE() / nu * rho()));
   }
 };
-class single_rebar_rectangle_column : public single_rebar_rectangle_section {
+class longitudinal_rebar_rectangle_column
+    : public longitudinal_rebar_rectangle_section {
   num l;
+  using super = longitudinal_rebar_rectangle_section;
 
 public:
-  single_rebar_rectangle_column(num length, single_rebar_rectangle_section sec)
-      : l(length), single_rebar_rectangle_section(sec) {}
+  longitudinal_rebar_rectangle_column(num length,
+                                      longitudinal_rebar_rectangle_section sec)
+      : l(length), super(sec) {}
   static num phi();
+  num Ncu() { return phi() * this->super::Ncu(); }
 };
+class spiral_longitudinal_rebar_rectangle_section : public longitudinal_rebar_rectangle_section{
+
+}
 } // namespace concrete
 } // namespace structure

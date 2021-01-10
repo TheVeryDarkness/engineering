@@ -37,9 +37,9 @@ private:
   digits_t tail_pos; // positive for decimal, negative for post-zeros
   digits_t digits;   // valid digits, positive
   constexpr static digits_t literal_1 = 1;
-  template <typename Ty> constexpr static Ty pow10(Ty exp) noexcept {
-    Ty p = 1;
-    for (Ty i = 1; i < exp; ++i)
+  constexpr static valid_number_t pow10(valid_number_t exp) noexcept {
+    valid_number_t p = 1;
+    for (valid_number_t i = 0; i < exp; ++i)
       p *= 10;
     return p;
   }
@@ -72,7 +72,7 @@ private:
       return valid_number;
     if (d > digits)
       return 0;
-    auto [_1, _2] = builtin_div(valid_number, pow10<digits_t>(d - literal_1));
+    auto [_1, _2] = builtin_div(valid_number, pow10(d - literal_1));
     valid_number = _1 / 10;
     if (_1 % 10 > 5 || (_1 % 10 == 5 && _2))
       valid_number += 1;
@@ -113,7 +113,7 @@ private:
 public:
   unsigned_number(valid_number_t vn, digits_t decimal) noexcept
       : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
-    assert(digits < max_digits10);
+    assert(digits <= max_digits10);
   }
   explicit unsigned_number(valid_number_t vn) noexcept
       : unsigned_number(vn, 0) {}
@@ -121,8 +121,8 @@ public:
     digits_t d = count_digits(num);
     if (d > max_digits10)
       throw;
-    num *= pow10<digits_t>(max_digits10 - d);
-    return unsigned_number(num, max_digits10);
+    num *= pow10(max_digits10 - d);
+    return unsigned_number(num, max_digits10 - d);
   }
   unsigned_number(const unsigned_number &) noexcept = default;
   unsigned_number &rounding(digits_t d) {
@@ -187,13 +187,16 @@ public:
     if (that.digits >= digits) {
       valid_number *= pow10(digits);
       round_div(valid_number, approximate_for_digits(that));
-      tail_pos -= that.tail_pos;
+      // tail_pos += digits;
+      // tail_pos -= that.tail_pos - (that.digits - digits);
+      (tail_pos += that.digits) -= that.tail_pos;
     } else {
       adjust_digits_to(that);
       valid_number *= pow10(that.digits);
-      tail_pos += that.digits;
       round_div(valid_number, that.valid_number);
-      tail_pos -= that.tail_pos;
+      // tail_pos += that.digits;
+      // tail_pos -= that.tail_pos;
+      (tail_pos += that.digits) -= that.tail_pos;
     }
     adjust_valid_digits();
     return *this;

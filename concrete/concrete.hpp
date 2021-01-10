@@ -57,7 +57,7 @@ public:
   num alphaE() const { return this->rebar::Es / this->concrete::Ec; }
   num rho() const { return As / A; }
   num Ntcr() const {
-    return this->concrete::Ec * A * (num::exact(1) + alphaE() * rho());
+    return this->concrete::ft * A * (num::exact(1) + alphaE() * rho());
   }
 };
 } // namespace concrete

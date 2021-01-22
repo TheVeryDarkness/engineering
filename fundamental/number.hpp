@@ -30,8 +30,7 @@ class unsigned_number {
 public:
   using valid_number_t = std::uint_fast32_t;
   using digits_t = std::int_fast8_t;
-  constexpr static digits_t max_digits10 =
-      (std::numeric_limits<valid_number_t>::digits10 - 1) / 2;
+  constexpr static digits_t max_digits10 = (std::numeric_limits<valid_number_t>::digits10 - 1) / 2;
 
 private:
   valid_number_t valid_number;
@@ -51,12 +50,11 @@ private:
     return d;
   }
   bool digits_legal() const { return digits == count_digits(valid_number); }
-  [[nodiscard]] constexpr static std::pair<valid_number_t, valid_number_t>
-  builtin_div(valid_number_t de, valid_number_t no) noexcept {
+  [[nodiscard]] constexpr static std::pair<valid_number_t, valid_number_t> builtin_div(valid_number_t de,
+                                                                                       valid_number_t no) noexcept {
     return {de / no, de % no};
   }
-  constexpr static void round_div(valid_number_t &de,
-                                  valid_number_t no) noexcept {
+  constexpr static void round_div(valid_number_t &de, valid_number_t no) noexcept {
     auto [_1, _2] = builtin_div(de + no / 2, no);
     if (no % 2 == 0) { // Only when nominator is even,
       if (_2 == 0 &&   // look right, just half of nominator
@@ -112,13 +110,11 @@ private:
   }
 
 public:
-  unsigned_number(valid_number_t vn, digits_t decimal)
-      : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
+  unsigned_number(valid_number_t vn, digits_t decimal) : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
     if (digits > max_digits10)
       throw std::out_of_range("Only support 4 digits");
   }
-  explicit unsigned_number(valid_number_t vn) noexcept
-      : unsigned_number(vn, 0) {}
+  explicit unsigned_number(valid_number_t vn) noexcept : unsigned_number(vn, 0) {}
   static unsigned_number exact(valid_number_t num) {
     digits_t d = count_digits(num);
     if (d > max_digits10)
@@ -139,9 +135,7 @@ public:
   bool operator==(const unsigned_number &that) const noexcept {
     return valid_number == that.valid_number && tail_pos == that.tail_pos;
   }
-  bool operator!=(const unsigned_number &that) const noexcept {
-    return !(*this == that);
-  }
+  bool operator!=(const unsigned_number &that) const noexcept { return !(*this == that); }
   bool operator<(const unsigned_number &that) const {
     if (that.tail_pos < tail_pos)
       if (digits - tail_pos > that.digits - that.tail_pos)
@@ -203,30 +197,14 @@ public:
     adjust_valid_digits();
     return *this;
   }
-  unsigned_number operator+(const unsigned_number &that) const & {
-    return unsigned_number(*this) += that;
-  }
-  unsigned_number operator-(const unsigned_number &that) const & {
-    return unsigned_number(*this) -= that;
-  }
-  unsigned_number operator*(const unsigned_number &that) const & {
-    return unsigned_number(*this) *= that;
-  }
-  unsigned_number operator/(const unsigned_number &that) const & {
-    return unsigned_number(*this) /= that;
-  }
-  unsigned_number operator+(const unsigned_number &that) && {
-    return *this += that;
-  }
-  unsigned_number operator-(const unsigned_number &that) && {
-    return *this -= that;
-  }
-  unsigned_number operator*(const unsigned_number &that) && {
-    return *this *= that;
-  }
-  unsigned_number operator/(const unsigned_number &that) && {
-    return *this /= that;
-  }
+  unsigned_number operator+(const unsigned_number &that) const & { return unsigned_number(*this) += that; }
+  unsigned_number operator-(const unsigned_number &that) const & { return unsigned_number(*this) -= that; }
+  unsigned_number operator*(const unsigned_number &that) const & { return unsigned_number(*this) *= that; }
+  unsigned_number operator/(const unsigned_number &that) const & { return unsigned_number(*this) /= that; }
+  unsigned_number operator+(const unsigned_number &that) && { return *this += that; }
+  unsigned_number operator-(const unsigned_number &that) && { return *this -= that; }
+  unsigned_number operator*(const unsigned_number &that) && { return *this *= that; }
+  unsigned_number operator/(const unsigned_number &that) && { return *this /= that; }
 
   std::string to_string() const {
     std::string s = std::to_string(valid_number);
@@ -283,11 +261,7 @@ static inline unsigned_number operator""_num(const char *s) {
   }
   return unsigned_number(vn, dec);
 }
-static inline unsigned_number operator""_num(const char *s, std::size_t) {
-  return operator""_num(s);
-}
-std::ostream &operator<<(std::ostream &o, const unsigned_number &n) {
-  return o << n.to_string();
-}
+static inline unsigned_number operator""_num(const char *s, std::size_t) { return operator""_num(s); }
+std::ostream &operator<<(std::ostream &o, const unsigned_number &n) { return o << n.to_string(); }
 } // namespace fundamental
 } // namespace structure

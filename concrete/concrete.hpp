@@ -16,16 +16,13 @@ protected:
   // p.22 2-4
   static num fcuk_to_fck(num::valid_number_t fcuk) {
     using namespace fundamental;
-    num alpah1 = fcuk <= 50
-                     ? "0.76"_num              // 0.76
-                     : fcuk >= 80 ? "0.82"_num // 0.82
-                                  : num(fcuk - 50) *
-                                        "0.002"_num // (0.82 - 0.76) / (80 - 50)
+    num alpah1 = fcuk <= 50 ? "0.76"_num                                // 0.76
+                            : fcuk >= 80 ? "0.82"_num                   // 0.82
+                                         : num(fcuk - 50) * "0.002"_num // (0.82 - 0.76) / (80 - 50)
         ;
     num alpha2 = fcuk <= 40 ? "1.00"_num              // 1.00
                             : fcuk >= 80 ? "0.87"_num // 0.87
-                                         : num(100 - 87, 2) / num(80 - 40, 2) *
-                                               num(fcuk - 40);
+                                         : num(100 - 87, 2) / num(80 - 40, 2) * num(fcuk - 40);
     return num(88, 2) * alpah1 * alpha2 * num(fcuk);
   }
   // p.22
@@ -34,8 +31,7 @@ protected:
   num Ec, fc, ft, epsilon_0, epsilon_cu;
 
 public:
-  concrete(num Ec, num fc, num ft, num epsilon_0 = num(2, 3),
-           num epsilon_cu = num(3, 4))
+  concrete(num Ec, num fc, num ft, num epsilon_0 = num(2, 3), num epsilon_cu = num(3, 4))
       : Ec(Ec), fc(fc), ft(ft), epsilon_0(epsilon_0), epsilon_cu(epsilon_cu) {}
 };
 class rebar {
@@ -44,8 +40,7 @@ protected:
   opt fy_, fsu;
 
 public:
-  rebar(num Es, num fy, opt fy_ = {}, opt fsu = {})
-      : Es(Es), fy(fy), fy_(fy_), fsu(fsu) {}
+  rebar(num Es, num fy, opt fy_ = {}, opt fsu = {}) : Es(Es), fy(fy), fy_(fy_), fsu(fsu) {}
 };
 class longitudinal_rebar_rectangle_section : public concrete, rebar {
   const num As, A;
@@ -58,8 +53,7 @@ class longitudinal_rebar_rectangle_section : public concrete, rebar {
   }
 
 public:
-  longitudinal_rebar_rectangle_section(num b, num h, num As, concrete c,
-                                       rebar s)
+  longitudinal_rebar_rectangle_section(num b, num h, num As, concrete c, rebar s)
       : As(As), A(CalcA(b, h, As)), concrete(c), rebar(s) {}
   const concrete &c() const { return *this; }
   const rebar &r() const { return *this; }
@@ -77,29 +71,23 @@ public:
   num Ncu() const { return fc * A + fy_.value() * As; }
   // p.53 4-25
   num sigma_s2(num Nc, num nu, num Ct) {
-    return Nc * (num::exact(1) + Ct) / (num::exact(1) + nu / alphaE() / rho()) /
-           As;
+    return Nc * (num::exact(1) + Ct) / (num::exact(1) + nu / alphaE() / rho()) / As;
   }
   // p.54 4-26
   num sigma_c2(num Nc, num nu, num Ct) {
     return Nc / A *
-           (num::exact(1) - alphaE() * (num::exact(1) + Ct) * As / nu / A /
-                                (num::exact(1) + alphaE() / nu * rho()));
+           (num::exact(1) - alphaE() * (num::exact(1) + Ct) * As / nu / A / (num::exact(1) + alphaE() / nu * rho()));
   }
 };
-class longitudinal_rebar_rectangle_column
-    : public longitudinal_rebar_rectangle_section {
+class longitudinal_rebar_rectangle_column : public longitudinal_rebar_rectangle_section {
   num l;
   using super = longitudinal_rebar_rectangle_section;
 
 public:
-  longitudinal_rebar_rectangle_column(num length,
-                                      longitudinal_rebar_rectangle_section sec)
-      : l(length), super(sec) {}
+  longitudinal_rebar_rectangle_column(num length, longitudinal_rebar_rectangle_section sec) : l(length), super(sec) {}
   static num phi();
   num Ncu() { return phi() * this->super::Ncu(); }
 };
-class spiral_longitudinal_rebar_rectangle_section
-    : public longitudinal_rebar_rectangle_section {};
+class spiral_longitudinal_rebar_rectangle_section : public longitudinal_rebar_rectangle_section {};
 } // namespace concrete
 } // namespace structure

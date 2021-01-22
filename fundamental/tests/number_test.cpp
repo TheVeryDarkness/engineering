@@ -1,20 +1,11 @@
 #include "../number.hpp"
 #include <iostream>
 using std::cout, std::endl;
-using structure::fundamental::unsigned_number,
-    structure::fundamental::operator""_num;
-void add_test(unsigned_number a, unsigned_number b) {
-  cout << a << " + " << b << " = " << a + b << endl;
-}
-void minus_test(unsigned_number a, unsigned_number b) {
-  cout << a << " - " << b << " = " << a - b << endl;
-}
-void mul_test(unsigned_number a, unsigned_number b) {
-  cout << a << " * " << b << " = " << a * b << endl;
-}
-void div_test(unsigned_number a, unsigned_number b) {
-  cout << a << " / " << b << " = " << a / b << endl;
-}
+using structure::fundamental::unsigned_number, structure::fundamental::operator""_num;
+void add_test(unsigned_number a, unsigned_number b) { cout << a << " + " << b << " = " << a + b << endl; }
+void minus_test(unsigned_number a, unsigned_number b) { cout << a << " - " << b << " = " << a - b << endl; }
+void mul_test(unsigned_number a, unsigned_number b) { cout << a << " * " << b << " = " << a * b << endl; }
+void div_test(unsigned_number a, unsigned_number b) { cout << a << " / " << b << " = " << a / b << endl; }
 int main() noexcept {
   // basic tests
   {

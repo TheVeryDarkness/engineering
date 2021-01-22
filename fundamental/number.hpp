@@ -95,7 +95,7 @@ private:
   }
   void adjust_digits_to(const unsigned_number &that) {
     remove_decimal(digits - that.digits);
-    assert(count_digits(digits) == that.digits);
+    assert(count_digits(valid_number) == that.digits);
   }
   valid_number_t approximate_for_tail(const unsigned_number &that) const {
     assert(that.tail_pos >= tail_pos);
@@ -236,22 +236,22 @@ static inline unsigned_number operator""_num(
 // xxx
 // xxxey
 // xxxEy
-static inline unsigned_number operator""_num(const char *s) {
+static inline unsigned_number make_number(const char *begin, const char *end = nullptr) {
   using vn_t = unsigned_number::valid_number_t;
   vn_t vn = 0;
   bool find_dot = false;
   unsigned_number::digits_t dec = 0;
-  while (*s) {
-    auto c = *s;
-    ++s;
+  while (begin != end && *begin) {
+    auto c = *begin;
+    ++begin;
     if ('0' <= c && c <= '9')
       (vn *= 10) += operator""_num(c);
     else if (c == '.') {
       find_dot = true;
       continue;
     } else if (c == 'e' || c == 'E') {
-      if (*s) {
-        auto n = string_to_integer<vn_t>(s);
+      if (*begin) {
+        auto n = string_to_integer<vn_t>(begin);
         dec -= n;
       }
       return unsigned_number(vn, dec);
@@ -259,9 +259,12 @@ static inline unsigned_number operator""_num(const char *s) {
     if (find_dot)
       ++dec;
   }
+  if (end && begin != end)
+    throw std::invalid_argument("Unexpected termination in strings.");
   return unsigned_number(vn, dec);
 }
-static inline unsigned_number operator""_num(const char *s, std::size_t) { return operator""_num(s); }
+static inline unsigned_number operator""_num(const char *s) { return make_number(s); }
+static inline unsigned_number operator""_num(const char *s, std::size_t n) { return make_number(s, s + n); }
 std::ostream &operator<<(std::ostream &o, const unsigned_number &n) { return o << n.to_string(); }
 } // namespace fundamental
 } // namespace structure

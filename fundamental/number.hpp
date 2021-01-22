@@ -244,6 +244,11 @@ static inline unsigned_number::valid_number_t operator""_num(char c) {
     throw;
   return c - '0';
 }
+static inline unsigned_number operator""_num(
+    // Should be unsigned_number::valid_number_t
+    unsigned long long v) {
+  return unsigned_number(v);
+}
 // Support formar:
 // xxx.xxx
 // xxx

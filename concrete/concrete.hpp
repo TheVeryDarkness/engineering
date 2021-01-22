@@ -16,15 +16,16 @@ protected:
   // p.22 2-4
   static num fcuk_to_fck(num::valid_number_t fcuk) {
     using namespace fundamental;
-    num alpah1 = fcuk <= 50 ? "0.76"_num // 0.76
-                 : fcuk >= 80
-                     ? "0.82"_num                   // 0.82
-                     : num(fcuk - 50) * "0.002"_num // (0.82 - 0.76) / (80 - 50)
+    num alpah1 = fcuk <= 50
+                     ? "0.76"_num              // 0.76
+                     : fcuk >= 80 ? "0.82"_num // 0.82
+                                  : num(fcuk - 50) *
+                                        "0.002"_num // (0.82 - 0.76) / (80 - 50)
         ;
-    num alpha2 = fcuk <= 40 ? "1.00"_num // 1.00
-                 : fcuk >= 80
-                     ? "0.87"_num // 0.87
-                     : num(100 - 87, 2) / num(80 - 40, 2) * num(fcuk - 40);
+    num alpha2 = fcuk <= 40 ? "1.00"_num              // 1.00
+                            : fcuk >= 80 ? "0.87"_num // 0.87
+                                         : num(100 - 87, 2) / num(80 - 40, 2) *
+                                               num(fcuk - 40);
     return num(88, 2) * alpah1 * alpha2 * num(fcuk);
   }
   // p.22
@@ -98,8 +99,7 @@ public:
   static num phi();
   num Ncu() { return phi() * this->super::Ncu(); }
 };
-class spiral_longitudinal_rebar_rectangle_section : public longitudinal_rebar_rectangle_section{
-
-}
+class spiral_longitudinal_rebar_rectangle_section
+    : public longitudinal_rebar_rectangle_section {};
 } // namespace concrete
 } // namespace structure

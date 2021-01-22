@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 namespace structure {
@@ -111,9 +112,10 @@ private:
   }
 
 public:
-  unsigned_number(valid_number_t vn, digits_t decimal) noexcept
+  unsigned_number(valid_number_t vn, digits_t decimal)
       : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
-    assert(digits <= max_digits10);
+    if (digits > max_digits10)
+      throw std::out_of_range("Only support 4 digits");
   }
   explicit unsigned_number(valid_number_t vn) noexcept
       : unsigned_number(vn, 0) {}
@@ -239,7 +241,7 @@ static inline unsigned_number operator""_e_1(unsigned long long num) {
   assert(num <= std ::numeric_limits<vn_t>::max());
   return unsigned_number(static_cast<vn_t>(num), 1);
 }
-static inline unsigned_number::valid_number_t operator""_num(char c) {
+constexpr static inline unsigned_number::valid_number_t operator""_num(char c) {
   if (c < '0' || c > '9')
     throw;
   return c - '0';
@@ -247,9 +249,11 @@ static inline unsigned_number::valid_number_t operator""_num(char c) {
 static inline unsigned_number operator""_num(
     // Should be unsigned_number::valid_number_t
     unsigned long long v) {
-  return unsigned_number(v);
+  if (v > std::numeric_limits<unsigned_number::valid_number_t>::max())
+    throw std::out_of_range("Number far huger than limit.");
+  return unsigned_number(static_cast<unsigned_number::valid_number_t>(v));
 }
-// Support formar:
+// Support format:
 // xxx.xxx
 // xxx
 // xxxey

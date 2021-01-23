@@ -115,6 +115,12 @@ public:
     if (digits > max_digits10)
       throw std::out_of_range("Out of digits Limits.");
   }
+  // Automatic remove tails
+  constexpr explicit unsigned_number(valid_number_t vn, digits_t decimal, std::nothrow_t)
+      : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
+    if (digits > max_digits10)
+      remove_decimal(digits - max_digits10), digits = max_digits10;
+  }
   constexpr explicit unsigned_number(valid_number_t vn) noexcept : unsigned_number(vn, 0) {}
   constexpr static unsigned_number exact(valid_number_t num) {
     digits_t d = count_digits(num);
@@ -229,16 +235,56 @@ public:
     s += std::to_string(digits - tail_pos - literal_1);
     return s;
   }
+  constexpr static inline unsigned_number::valid_number_t char_to_number(char c) {
+    if (c < '0' || c > '9')
+      throw;
+    return c - '0';
+  }
+  // Support format:
+  // xxx.xxx
+  // xxx
+  // xxxey
+  // xxxEy
+  constexpr static inline unsigned_number to_number(const char *begin, const char *end = nullptr) {
+    using vn_t = unsigned_number::valid_number_t;
+    constexpr auto md = unsigned_number::max_digits10;
+    vn_t vn = 0;
+    bool find_dot = false;
+    unsigned_number::digits_t tail = 0, valid = 0;
+    while (begin != end && *begin) {
+      char c = *begin;
+      ++begin;
+      if ('0' <= c && c <= '9') {
+        if (valid <= md) {
+          (vn *= 10) += char_to_number(c);
+          if (c != '0')
+            ++valid;
+          if (find_dot)
+            ++tail;
+        }
+      } else if (c == '.') {
+        find_dot = true;
+        continue;
+      } else if (c == 'e' || c == 'E') {
+        if (*begin) {
+          auto n = string_to_integer<vn_t>(begin);
+          tail -= n;
+        }
+        break;
+      }
+    }
+    if (valid > md) {
+      assert(valid == md + 1);
+      --tail;
+      round_div(vn, 10);
+    }
+    return unsigned_number(vn, tail);
+  }
 };
 constexpr static inline unsigned_number operator""_e_1(unsigned long long num) {
   using vn_t = unsigned_number::valid_number_t;
   assert(num <= std ::numeric_limits<vn_t>::max());
   return unsigned_number(static_cast<vn_t>(num), 1);
-}
-constexpr static inline unsigned_number::valid_number_t operator""_num(char c) {
-  if (c < '0' || c > '9')
-    throw;
-  return c - '0';
 }
 constexpr static inline unsigned_number operator""_num(
     // Should be unsigned_number::valid_number_t
@@ -247,40 +293,10 @@ constexpr static inline unsigned_number operator""_num(
     throw std::out_of_range("Number far huger than limit.");
   return unsigned_number(static_cast<unsigned_number::valid_number_t>(v));
 }
-// Support format:
-// xxx.xxx
-// xxx
-// xxxey
-// xxxEy
-constexpr static inline unsigned_number make_number(const char *begin, const char *end = nullptr) {
-  using vn_t = unsigned_number::valid_number_t;
-  vn_t vn = 0;
-  bool find_dot = false;
-  unsigned_number::digits_t dec = 0;
-  while (begin != end && *begin) {
-    auto c = *begin;
-    ++begin;
-    if ('0' <= c && c <= '9')
-      (vn *= 10) += operator""_num(c);
-    else if (c == '.') {
-      find_dot = true;
-      continue;
-    } else if (c == 'e' || c == 'E') {
-      if (*begin) {
-        auto n = string_to_integer<vn_t>(begin);
-        dec -= n;
-      }
-      return unsigned_number(vn, dec);
-    }
-    if (find_dot)
-      ++dec;
-  }
-  if (end && begin != end)
-    throw std::invalid_argument("Unexpected termination in strings.");
-  return unsigned_number(vn, dec);
+constexpr static inline unsigned_number operator""_num(const char *s) { return unsigned_number::to_number(s); }
+constexpr static inline unsigned_number operator""_num(const char *s, std::size_t n) {
+  return unsigned_number::to_number(s, s + n);
 }
-constexpr static inline unsigned_number operator""_num(const char *s) { return make_number(s); }
-constexpr static inline unsigned_number operator""_num(const char *s, std::size_t n) { return make_number(s, s + n); }
 std::ostream &operator<<(std::ostream &o, const unsigned_number &n) { return o << n.to_string(); }
 } // namespace fundamental
 } // namespace structure

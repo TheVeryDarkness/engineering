@@ -7,7 +7,7 @@
 namespace structure {
 namespace fundamental {
 constexpr static inline auto str_pi = "3.141592653";
-constexpr static inline unsigned_number pi = operator""_num(str_pi, unsigned_number::max_digits10 + 1);
+constexpr static inline unsigned_number pi = unsigned_number::to_number(str_pi);
 constexpr static inline unsigned_number pi_4 = pi / unsigned_number::exact(4);
 #ifdef __cpp_lib_constexpr_vector
 constexpr

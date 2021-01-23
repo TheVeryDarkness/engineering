@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project("structure.fundamental" LANGUAGES "CXX")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 add_executable("number_test" "tests/number_test.cpp")
 add_executable("math_test" "tests/math_test.cpp")
 add_test(NAME "number_test" COMMAND "number_test")

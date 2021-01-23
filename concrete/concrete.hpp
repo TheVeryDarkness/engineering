@@ -157,7 +157,7 @@ class longitudinal_rebar_rectangle_column : public longitudinal_rebar_rectangle_
   using super = longitudinal_rebar_rectangle_section;
 
 public:
-  longitudinal_rebar_rectangle_column(num length, longitudinal_rebar_rectangle_section sec) : l(length), super(sec) {}
+  longitudinal_rebar_rectangle_column(num length, longitudinal_rebar_rectangle_section sec) : super(sec), l(length) {}
   static num phi();
   num Ncu() { return phi() * this->super::Ncu(); }
 };

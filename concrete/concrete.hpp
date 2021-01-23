@@ -82,14 +82,14 @@ protected:
 public:
   steel(num Es, num fy, opt fy_ = {}, opt fsu = {}) : Es(Es), fy(fy), fy_(fy_), fsu(fsu) {}
 };
-const static steel HPB300 = {{210, -3}, num(270, 0), num(270, 0)};
-const static steel HRB335 = {{200, -3}, num(300, 0), num(300, 0)};
-const static const steel &HRBF335 = HRB335;
-const static steel HRB400 = {{200, -3}, num(360, 0), num(360, 0)};
-const static const steel &HRBF400 = HRB400;
-const static const steel &RRB400 = HRB400;
-const static steel HRB500 = {{200, -3}, num(435, 0), num(435, 0)};
-const static const steel &HRBF500 = HRB500;
+static const steel HPB300 = {{210, -3}, num(270, 0), num(270, 0)};
+static const steel HRB335 = {{200, -3}, num(300, 0), num(300, 0)};
+static const steel &HRBF335 = HRB335;
+static const steel HRB400 = {{200, -3}, num(360, 0), num(360, 0)};
+static const steel &HRBF400 = HRB400;
+static const steel &RRB400 = HRB400;
+static const steel HRB500 = {{200, -3}, num(435, 0), num(435, 0)};
+static const steel &HRBF500 = HRB500;
 
 class rebar {
   const num d, _As;

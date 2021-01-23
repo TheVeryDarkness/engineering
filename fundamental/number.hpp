@@ -206,6 +206,21 @@ public:
   unsigned_number operator*(const unsigned_number &that) && { return *this *= that; }
   unsigned_number operator/(const unsigned_number &that) && { return *this /= that; }
 
+  // mul 10
+  unsigned_number &operator<<=(digits_t d) {
+    tail_pos -= d;
+    return *this;
+  }
+  // div 10
+  unsigned_number &operator>>=(digits_t d) {
+    tail_pos += d;
+    return *this;
+  }
+  unsigned_number operator<<(digits_t d) const & { return unsigned_number(*this) <<= d; }
+  unsigned_number operator>>(digits_t d) const & { return unsigned_number(*this) <<= d; }
+  unsigned_number operator<<(digits_t d) && { return *this <<= d; }
+  unsigned_number operator>>(digits_t d) && { return *this >>= d; }
+
   std::string to_string() const {
     std::string s = std::to_string(valid_number);
     s.insert(s.cbegin() + 1, '.');

@@ -113,7 +113,7 @@ public:
   constexpr unsigned_number(valid_number_t vn, digits_t decimal)
       : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
     if (digits > max_digits10)
-      throw std::out_of_range("Only support 4 digits");
+      throw std::out_of_range("Out of digits Limits.");
   }
   constexpr explicit unsigned_number(valid_number_t vn) noexcept : unsigned_number(vn, 0) {}
   constexpr static unsigned_number exact(valid_number_t num) {

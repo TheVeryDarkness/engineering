@@ -18,16 +18,17 @@ class concrete {
 protected:
   static num alpha1(num::valid_number_t fcuk) {
     using namespace fundamental;
-    return fcuk <= 50 ? 0.76_num                                // 0.76
-                      : fcuk >= 80 ? 0.82_num                   // 0.82
-                                   : num(fcuk - 50) * 0.002_num // (0.82 - 0.76) / (80 - 50)
+    return fcuk <= 50 ? num(76, 2)                              // 0.76
+                      : fcuk >= 80 ? num(82, 2)                 // 0.82
+                                   : num(fcuk - 50) * num(2, 3) // (0.82 - 0.76) / (80 - 50) = 0.002
         ;
   }
   static num alpha2(num::valid_number_t fcuk) {
     using namespace fundamental;
-    return fcuk <= 40 ? "1.00"_num              // 1.00
-                      : fcuk >= 80 ? "0.87"_num // 0.87
-                                   : num(100 - 87, 2) / num(80 - 40, 2) * num(fcuk - 40);
+    return fcuk <= 40 ? "1.00"_num                               // 1.00
+                      : fcuk >= 80 ? "0.87"_num                  // 0.87
+                                   : num(fcuk - 40) * num(32, 4) //(1.00 - 0.87) / (80 - 40) = 0.00325 = 0.0032
+        ;
   }
   // p.22 2-4
   // GB 50010-2010 4.1.3
@@ -41,7 +42,7 @@ public:
   concrete(num Ec, num fc, num ft, num epsilon_0 = num(2, 3), num epsilon_cu = num(3, 4))
       : Ec(Ec), fc(fc), ft(ft), epsilon_0(epsilon_0), epsilon_cu(epsilon_cu) {}
   // GB 50010-2010 4.1.5
-  num Gc() const { return num(4, 1) /*40%*/ * Ec; }
+  num Gc() const { return (num::exact(4) >> 1) /*40%*/ * Ec; }
   // GB 50010-2010 4.1.5
   num nuc() const { return {2, 1}; }
   // GB 50010-2010 4.1.5

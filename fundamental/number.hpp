@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-namespace structure {
+namespace engineering {
 namespace fundamental {
 template <typename Ty> Ty string_to_integer(const char *s) {
   if constexpr (std::is_same_v<Ty, int>)

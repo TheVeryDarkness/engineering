@@ -4,7 +4,7 @@
 #pragma once
 #include "./number.hpp"
 #include <vector>
-namespace structure {
+namespace engineering {
 namespace fundamental {
 constexpr static inline auto str_pi = "3.141592653";
 constexpr static inline unsigned_number pi = unsigned_number::to_number(str_pi);

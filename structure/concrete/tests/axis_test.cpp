@@ -2,8 +2,8 @@
 #include <iostream>
 int main() {
   using std::cout, std::endl;
-  using namespace structure::concrete;
-  using namespace structure::fundamental;
+  using namespace engineering::structure::concrete;
+  using namespace engineering::fundamental;
   //
   concrete c("2.51e4"_num, "30.8"_num, "1.97"_num);
   steel s("2.05e5"_num, 376_num, {}, 681_num);

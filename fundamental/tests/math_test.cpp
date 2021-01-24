@@ -5,7 +5,7 @@
 #include <iostream>
 int main() {
   using std::cout, std::endl;
-  using namespace structure::fundamental;
+  using namespace engineering::fundamental;
   cout << "pi = " << pi << endl;
   cout << "pi / 4 = " << pi_4 << endl;
   cout << "pi ^ 2 = " << pow(pi, 2) << endl;

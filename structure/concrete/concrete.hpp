@@ -5,6 +5,7 @@
 #include "math.hpp"
 #include "number.hpp"
 #include <optional>
+namespace engineering {
 namespace structure {
 namespace concrete {
 using num = typename fundamental::unsigned_number;
@@ -164,3 +165,4 @@ public:
 class spiral_longitudinal_rebar_rectangle_section : public longitudinal_rebar_rectangle_section {};
 } // namespace concrete
 } // namespace structure
+} // namespace engineering

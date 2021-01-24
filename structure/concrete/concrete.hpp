@@ -2,8 +2,8 @@
  * UTF-8 encoding.
  */
 #pragma once
-#include "../fundamental/math.hpp"
-#include "../fundamental/number.hpp"
+#include "math.hpp"
+#include "number.hpp"
 #include <optional>
 namespace structure {
 namespace concrete {

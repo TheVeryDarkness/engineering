@@ -2,7 +2,7 @@
  * UTF-8 encoding
  */
 #pragma once
-#include "number.hpp"
+#include "./number.hpp"
 #include <vector>
 namespace structure {
 namespace fundamental {

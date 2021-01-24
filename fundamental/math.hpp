@@ -61,6 +61,7 @@ constexpr
     delta *= (unsigned_number::exact(k - 1) - expo);
     delta /= K;
     delta *= x;
+    ++k;
   }
   if (i)
     return std::move(res) * pow(base, i);

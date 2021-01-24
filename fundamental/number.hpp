@@ -28,15 +28,15 @@ template <typename Ty> Ty string_to_integer(const char *s) {
 }
 class unsigned_number {
 public:
-  using valid_number_t = std::uint_fast32_t;
-  using valid_digits_t = std::uint_fast8_t;
-  using digits_t = std::int_fast16_t;
-  constexpr static valid_digits_t max_digits10 = (std::numeric_limits<valid_number_t>::digits10 - 1) / 2;
+  using valid_number_t = std::uint64_t;
+  using valid_digits_t = std::uint8_t;
+  using digits_t = std::int16_t;
+  constexpr static valid_digits_t max_digits10 = 6;
 
 private:
-  valid_number_t valid_number;
-  digits_t tail_pos;     // positive for decimal, negative for post-zeros
-  valid_digits_t digits; // valid digits, positive
+  valid_number_t valid_number : 45;
+  valid_digits_t digits : 3; // valid digits, positive
+  digits_t tail_pos : 16;    // positive for decimal, negative for post-zeros
   constexpr static valid_digits_t literal_1 = 1;
   constexpr static valid_number_t pow10(valid_digits_t exp) noexcept {
     valid_number_t p = 1;
@@ -55,14 +55,14 @@ private:
                                                                                        valid_number_t no) noexcept {
     return {de / no, de % no};
   }
-  constexpr static void round_div(valid_number_t &de, valid_number_t no) noexcept {
+  [[nodiscard]] constexpr static valid_number_t round_div(valid_number_t de, valid_number_t no) noexcept {
     auto [_1, _2] = builtin_div(de + no / 2, no);
     if (no % 2 == 0) { // Only when nominator is even,
       if (_2 == 0 &&   // look right, just half of nominator
           _1 % 2 == 1) // look left, the last digit is odd
         _1 -= 1;
     }
-    de = _1;
+    return _1;
   }
   constexpr valid_number_t as_if_remove_decimal(valid_digits_t d) const {
     valid_number_t valid_number = this->valid_number;
@@ -152,7 +152,7 @@ public:
       b.remove_decimal(b.digits - a.digits);
   }
   constexpr bool valid() const noexcept { return digits != 0; }
-  constexpr unsigned_number &rounding(digits_t d) {
+  constexpr unsigned_number &rounding(valid_digits_t d) {
     assert(d > 0);
     if (d <= 0)
       return *this;
@@ -213,14 +213,14 @@ public:
       throw std::invalid_argument("Divided by 0.");
     if (that.digits >= digits) {
       valid_number *= pow10(digits);
-      round_div(valid_number, approximate_for_digits(that));
+      valid_number = round_div(valid_number, approximate_for_digits(that));
       // tail_pos += digits;
       // tail_pos -= that.tail_pos - (that.digits - digits);
       (tail_pos += that.digits) -= that.tail_pos;
     } else {
       adjust_digits_to(that);
       valid_number *= pow10(that.digits);
-      round_div(valid_number, that.valid_number);
+      valid_number = round_div(valid_number, that.valid_number);
       // tail_pos += that.digits;
       // tail_pos -= that.tail_pos;
       (tail_pos += that.digits) -= that.tail_pos;
@@ -338,7 +338,7 @@ public:
     if (valid > md) {
       assert(valid == md + 1);
       --tail;
-      round_div(vn, 10);
+      vn = round_div(vn, 10);
     }
     return unsigned_number(vn, tail);
   }

@@ -147,9 +147,9 @@ public:
   constexpr bool operator!=(const unsigned_number &that) const noexcept { return !(*this == that); }
   constexpr bool operator<(const unsigned_number &that) const {
     if (that.tail_pos < tail_pos)
-      if (digits - tail_pos > that.digits - that.tail_pos)
+      if (digits - tail_pos < that.digits - that.tail_pos)
         return true;
-      else if (digits - tail_pos < that.digits - that.tail_pos)
+      else if (digits - tail_pos > that.digits - that.tail_pos)
         return false;
       else
         return valid_number * pow10(that.digits - digits) < that.valid_number;
@@ -170,7 +170,7 @@ public:
   constexpr unsigned_number &operator-=(const unsigned_number &that) {
     valid_number_t subtract;
     if (that.tail_pos >= tail_pos)
-      subtract = approximate_for_tail(that), valid_number -= subtract;
+      subtract = approximate_for_tail(that);
     else
       adjust_tail_to(that), subtract = that.valid_number;
     if (valid_number < subtract)

@@ -29,5 +29,8 @@ int main() {
   POW_TEST_INT(5.134, 4);
 
   POW_TEST_DEC(0.134, 0.5);
+  POW_TEST_DEC(0.134, 0.50);
+  POW_TEST_DEC(0.134, 0.500);
+  POW_TEST_DEC(0.134, 0.5000);
   POW_TEST_DEC(0.134, 2.5);
 }

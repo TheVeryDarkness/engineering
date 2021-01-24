@@ -29,22 +29,23 @@ template <typename Ty> Ty string_to_integer(const char *s) {
 class unsigned_number {
 public:
   using valid_number_t = std::uint_fast32_t;
-  using digits_t = std::int_fast8_t;
-  constexpr static digits_t max_digits10 = (std::numeric_limits<valid_number_t>::digits10 - 1) / 2;
+  using valid_digits_t = std::uint_fast8_t;
+  using digits_t = std::int_fast16_t;
+  constexpr static valid_digits_t max_digits10 = (std::numeric_limits<valid_number_t>::digits10 - 1) / 2;
 
 private:
   valid_number_t valid_number;
-  digits_t tail_pos; // positive for decimal, negative for post-zeros
-  digits_t digits;   // valid digits, positive
-  constexpr static digits_t literal_1 = 1;
+  digits_t tail_pos;     // positive for decimal, negative for post-zeros
+  valid_digits_t digits; // valid digits, positive
+  constexpr static valid_digits_t literal_1 = 1;
   constexpr static valid_number_t pow10(valid_number_t exp) noexcept {
     valid_number_t p = 1;
     for (valid_number_t i = 0; i < exp; ++i)
       p *= 10;
     return p;
   }
-  constexpr static digits_t count_digits(valid_number_t num) {
-    digits_t d = 0;
+  constexpr static valid_digits_t count_digits(valid_number_t num) {
+    valid_digits_t d = 0;
     while (num > 0)
       num /= 10, ++d;
     return d;
@@ -63,7 +64,7 @@ private:
     }
     de = _1;
   }
-  constexpr valid_number_t as_if_remove_decimal(digits_t d) const {
+  constexpr valid_number_t as_if_remove_decimal(valid_digits_t d) const {
     valid_number_t valid_number = this->valid_number;
     if (d < 0)
       throw;
@@ -77,7 +78,7 @@ private:
       valid_number += 1;
     return valid_number;
   }
-  constexpr void remove_decimal(digits_t d) {
+  constexpr void remove_decimal(valid_digits_t d) {
     valid_number = as_if_remove_decimal(d);
     tail_pos -= d;
   }
@@ -250,7 +251,8 @@ public:
     constexpr auto md = unsigned_number::max_digits10;
     vn_t vn = 0;
     bool find_dot = false;
-    unsigned_number::digits_t tail = 0, valid = 0;
+    unsigned_number::digits_t tail = 0;
+    valid_digits_t valid = 0;
     while (begin != end && *begin) {
       char c = *begin;
       ++begin;

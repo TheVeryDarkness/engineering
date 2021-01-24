@@ -38,7 +38,7 @@ private:
   digits_t tail_pos;     // positive for decimal, negative for post-zeros
   valid_digits_t digits; // valid digits, positive
   constexpr static valid_digits_t literal_1 = 1;
-  constexpr static valid_number_t pow10(valid_number_t exp) noexcept {
+  constexpr static valid_number_t pow10(valid_digits_t exp) noexcept {
     valid_number_t p = 1;
     for (valid_number_t i = 0; i < exp; ++i)
       p *= 10;
@@ -131,6 +131,7 @@ public:
     return unsigned_number(num, max_digits10 - d);
   }
   constexpr unsigned_number(const unsigned_number &) noexcept = default;
+  bool valid() const noexcept { return digits != 0; }
   constexpr unsigned_number &rounding(digits_t d) {
     assert(d > 0);
     if (d <= 0)
@@ -151,7 +152,7 @@ public:
       else if (digits - tail_pos < that.digits - that.tail_pos)
         return false;
       else
-        return valid_number < that.valid_number;
+        return valid_number * pow10(that.digits - digits) < that.valid_number;
     else
       return valid_number < approximate_for_tail(that);
   }
@@ -216,6 +217,36 @@ public:
   constexpr unsigned_number operator-(const unsigned_number &that) && { return *this -= that; }
   constexpr unsigned_number operator*(const unsigned_number &that) && { return *this *= that; }
   constexpr unsigned_number operator/(const unsigned_number &that) && { return *this /= that; }
+
+  constexpr unsigned_number div_1() {
+    if (digits - tail_pos > 0) {
+      auto [quo, rem] = builtin_div(valid_number, pow10(tail_pos));
+      valid_number = rem;
+      adjust_valid_digits();
+      return unsigned_number(quo);
+    } else
+      return unsigned_number(0);
+  }
+  constexpr unsigned_number &rem_eq_1() {
+    if (digits - tail_pos > 0)
+      valid_number %= pow10(tail_pos), adjust_valid_digits();
+    return *this;
+  }
+
+  constexpr valid_number_t as_number() {
+    if (tail_pos > 0)
+      throw;
+    constexpr auto d10 = std::numeric_limits<valid_number_t>::digits10;
+    constexpr auto max = std::numeric_limits<valid_number_t>::max();
+    if (digits > d10)
+      throw std::overflow_error("Exceeds valid_number's max");
+    auto p10 = pow10(-tail_pos);
+    if (valid_number > max / p10)
+      throw std::overflow_error("Exceeds valid_number's max");
+    return valid_number * p10;
+  }
+
+  constexpr unsigned_number minimal() const { return {1, tail_pos}; }
 
   // mul 10^d
   constexpr unsigned_number &operator<<=(digits_t d) {

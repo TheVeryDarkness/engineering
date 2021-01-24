@@ -38,7 +38,7 @@ constexpr
 
   return pos ? res : unsigned_number::exact(1) / res;
 }
-/*constexpr */ static inline unsigned_number pow(const unsigned_number base, unsigned_number expo) {
+/*constexpr */ static inline unsigned_number pow(unsigned_number base, unsigned_number expo) {
   // Maclaurin
   // if base <= 1
   //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
@@ -47,6 +47,7 @@ constexpr
   if (base > unsigned_number::exact(1)) {
     return unsigned_number::exact(1) / pow(unsigned_number::exact(1) / base, expo);
   }
+  unsigned_number::rounding_for_digits(base, expo);
   auto i = expo.div_1().as_number();
   unsigned_number res = unsigned_number::exact(1);
   unsigned_number x = unsigned_number::exact(1) - base;
@@ -57,9 +58,9 @@ constexpr
   while (delta >= min) {
     res -= delta;
     unsigned_number K = unsigned_number::exact(k);
-    res *= (unsigned_number::exact(k - 1) - expo);
-    res /= K;
-    res *= x;
+    delta *= (unsigned_number::exact(k - 1) - expo);
+    delta /= K;
+    delta *= x;
   }
   if (i)
     return std::move(res) * pow(base, i);

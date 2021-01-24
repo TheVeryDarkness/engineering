@@ -38,7 +38,7 @@ constexpr
 
   return pos ? res : unsigned_number::exact(1) / res;
 }
-/*constexpr */ static inline unsigned_number pow(unsigned_number base, unsigned_number expo) {
+constexpr static inline unsigned_number pow(unsigned_number base, unsigned_number expo) {
   // Maclaurin
   // if base <= 1
   //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)

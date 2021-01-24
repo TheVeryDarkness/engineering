@@ -130,7 +130,17 @@ public:
     num *= pow10(max_digits10 - d);
     return unsigned_number(num, max_digits10 - d);
   }
+  constexpr unsigned_number(unsigned_number &&) noexcept = default;
   constexpr unsigned_number(const unsigned_number &) noexcept = default;
+  constexpr unsigned_number &operator=(unsigned_number &&) noexcept = default;
+  constexpr unsigned_number &operator=(const unsigned_number &) noexcept = default;
+
+  constexpr static void rounding_for_digits(unsigned_number &a, unsigned_number &b) {
+    if (a.digits > b.digits)
+      a.remove_decimal(a.digits - b.digits);
+    else if (a.digits < b.digits)
+      a.remove_decimal(b.digits - a.digits);
+  }
   bool valid() const noexcept { return digits != 0; }
   constexpr unsigned_number &rounding(digits_t d) {
     assert(d > 0);
@@ -146,15 +156,12 @@ public:
   }
   constexpr bool operator!=(const unsigned_number &that) const noexcept { return !(*this == that); }
   constexpr bool operator<(const unsigned_number &that) const {
-    if (that.tail_pos < tail_pos)
-      if (digits - tail_pos < that.digits - that.tail_pos)
-        return true;
-      else if (digits - tail_pos > that.digits - that.tail_pos)
-        return false;
-      else
-        return valid_number * pow10(that.digits - digits) < that.valid_number;
+    if (valid_number == 0 || digits - tail_pos < that.digits - that.tail_pos)
+      return true;
+    else if (that.valid_number == 0 || digits - tail_pos > that.digits - that.tail_pos)
+      return false;
     else
-      return valid_number < approximate_for_tail(that);
+      return valid_number * pow10(that.digits - digits) < that.valid_number;
   }
   constexpr bool operator>(const unsigned_number &that) const { return that < *this; }
   constexpr bool operator<=(const unsigned_number &that) const { return !(that < *this); }

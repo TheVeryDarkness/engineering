@@ -167,11 +167,14 @@ public:
     return *this;
   }
   constexpr unsigned_number &operator-=(const unsigned_number &that) {
-    assert(*this >= that);
+    valid_number_t subtract;
     if (that.tail_pos >= tail_pos)
-      valid_number -= approximate_for_tail(that);
+      subtract = approximate_for_tail(that), valid_number -= subtract;
     else
-      adjust_tail_to(that), valid_number -= that.valid_number;
+      adjust_tail_to(that), subtract = that.valid_number;
+    if (valid_number < subtract)
+      throw std::underflow_error("Subtracted by a bigger number.");
+    valid_number -= subtract;
     adjust_valid_digits();
     return *this;
   }

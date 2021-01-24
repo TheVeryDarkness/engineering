@@ -6,7 +6,7 @@
 #include <set>
 #include <string>
 #include <vector>
-namespace structure {
+namespace engineering {
 namespace fundamental {
 using name_t = std::string;
 struct _module {
@@ -24,4 +24,4 @@ class expression {
   std::set<item> sum;
 };
 } // namespace fundamental
-} // namespace structure
+} // namespace engineering

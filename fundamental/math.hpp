@@ -39,4 +39,4 @@ constexpr
   return pos ? res : unsigned_number::exact(1) / res;
 }
 } // namespace fundamental
-} // namespace structure
+} // namespace engineering

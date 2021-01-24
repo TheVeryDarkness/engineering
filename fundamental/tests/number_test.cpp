@@ -9,9 +9,8 @@ void div_test(unsigned_number a, unsigned_number b) { cout << a << " / " << b <<
 int main() noexcept {
   // basic tests
   {
-    auto a = 0.001_num;
-    assert(0.001_num.to_string() == "1.e-3");
-    assert("0.001"_num.to_string() == "1.e-3");
+    assert((0.001_num).to_string() == "1.e-3");
+    assert(("0.001"_num).to_string() == "1.e-3");
   }
   {
     add_test("0.001"_num, "0.001"_num);

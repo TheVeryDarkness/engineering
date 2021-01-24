@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-	<Type Name="structure::fundamental::unsigned_number">
+	<Type Name="engineering::fundamental::unsigned_number">
 		<DisplayString>{{ value={valid_number}e{-tail_pos} }}</DisplayString>
 	</Type>
 </AutoVisualizer>

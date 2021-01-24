@@ -54,7 +54,7 @@ constexpr
   unsigned_number delta = expo * x;
   unsigned_number::valid_digits_t k = 2;
 
-  const auto min = base.minimal();
+  const auto min = base.minimal() >> 1;
   while (delta >= min) {
     res -= delta;
     unsigned_number K = unsigned_number::exact(k);

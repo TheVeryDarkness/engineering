@@ -304,4 +304,4 @@ constexpr static inline unsigned_number operator""_num(const char *s, std::size_
 }
 std::ostream &operator<<(std::ostream &o, const unsigned_number &n) { return o << n.to_string(); }
 } // namespace fundamental
-} // namespace structure
+} // namespace engineering

@@ -9,6 +9,11 @@ void div_test(unsigned_number a, unsigned_number b) { cout << a << " / " << b <<
 int main() noexcept {
   // basic tests
   {
+    auto a = 0.001_num;
+    assert(0.001_num.to_string() == "1.e-3");
+    assert("0.001"_num.to_string() == "1.e-3");
+  }
+  {
     add_test("0.001"_num, "0.001"_num);
     add_test("0.001"_num, "0.0001"_num);
     add_test("0.0001"_num, "0.001"_num);
@@ -45,6 +50,12 @@ int main() noexcept {
     auto z = unsigned_number::exact(1) + 8.17_num * 0.0123_num;
     cout << z << " = ";
     cout << x * y * z << endl;
+  }
+  {
+    unsigned_number a = 0.196_num;
+    unsigned_number _1 = unsigned_number::exact(1);
+    auto b = _1 - a;
+    cout << "1 - 0.196 = " << _1 << " - " << a << " = " << b << endl;
   }
   {
     auto a = unsigned_number(10, 3), b = "0.010"_num, c = "1.0e-2"_num;

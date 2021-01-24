@@ -126,22 +126,32 @@ public:
   constexpr static unsigned_number exact(valid_number_t num) {
     digits_t d = count_digits(num);
     if (d > max_digits10)
-      throw;
+      throw std::overflow_error("Exceeds valid_number_t's range.");
     num *= pow10(max_digits10 - d);
     return unsigned_number(num, max_digits10 - d);
+  }
+  constexpr static unsigned_number to_number(valid_number_t num, digits_t tar) {
+    digits_t d = count_digits(num);
+    if (d > max_digits10)
+      throw std::overflow_error("Exceeds valid_number_t's range.");
+    num *= pow10(tar - d);
+    return unsigned_number(num, tar - d);
   }
   constexpr unsigned_number(unsigned_number &&) noexcept = default;
   constexpr unsigned_number(const unsigned_number &) noexcept = default;
   constexpr unsigned_number &operator=(unsigned_number &&) noexcept = default;
   constexpr unsigned_number &operator=(const unsigned_number &) noexcept = default;
+  constexpr valid_digits_t valid_digits() const noexcept { return digits; }
+  constexpr digits_t tail_pos_in_digits() const noexcept { return tail_pos; }
+  constexpr digits_t head_pos_in_digits() const noexcept { return tail_pos - digits; }
 
   constexpr static void rounding_for_digits(unsigned_number &a, unsigned_number &b) {
     if (a.digits > b.digits)
       a.remove_decimal(a.digits - b.digits);
     else if (a.digits < b.digits)
-      a.remove_decimal(b.digits - a.digits);
+      b.remove_decimal(b.digits - a.digits);
   }
-  bool valid() const noexcept { return digits != 0; }
+  constexpr bool valid() const noexcept { return digits != 0; }
   constexpr unsigned_number &rounding(digits_t d) {
     assert(d > 0);
     if (d <= 0)
@@ -199,6 +209,8 @@ public:
     return *this;
   }
   constexpr unsigned_number &operator/=(const unsigned_number &that) {
+    if (!that.valid())
+      throw std::invalid_argument("Divided by 0.");
     if (that.digits >= digits) {
       valid_number *= pow10(digits);
       round_div(valid_number, approximate_for_digits(that));
@@ -227,10 +239,17 @@ public:
 
   constexpr unsigned_number div_1() {
     if (digits - tail_pos > 0) {
-      auto [quo, rem] = builtin_div(valid_number, pow10(tail_pos));
-      valid_number = rem;
-      adjust_valid_digits();
-      return unsigned_number(quo);
+      if (tail_pos > 0) {
+        auto [quo, rem] = builtin_div(valid_number, pow10(tail_pos));
+        valid_number = rem;
+        adjust_valid_digits();
+        return unsigned_number(quo);
+      } else {
+        auto copy = *this;
+        valid_number = 0;
+        digits = 0;
+        return copy;
+      }
     } else
       return unsigned_number(0);
   }
@@ -242,7 +261,7 @@ public:
 
   constexpr valid_number_t as_number() {
     if (tail_pos > 0)
-      throw;
+      throw std::domain_error("Not a integer.");
     constexpr auto d10 = std::numeric_limits<valid_number_t>::digits10;
     constexpr auto max = std::numeric_limits<valid_number_t>::max();
     if (digits > d10)
@@ -310,7 +329,7 @@ public:
         continue;
       } else if (c == 'e' || c == 'E') {
         if (*begin) {
-          auto n = string_to_integer<vn_t>(begin);
+          auto n = string_to_integer<digits_t>(begin);
           tail -= n;
         }
         break;

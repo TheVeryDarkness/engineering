@@ -44,12 +44,15 @@ constexpr static inline unsigned_number pow(unsigned_number base, unsigned_numbe
   //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
   // else
   //  base^expo = 1 / (1 / base)^expo
-  if (base > unsigned_number::exact(1)) {
-    return unsigned_number::exact(1) / pow(unsigned_number::exact(1) / base, expo);
+  if (base.head_pos_in_digits() != 0) {
+    unsigned_number::digits_t times = base.head_pos_in_digits();
+    base <<= times;
+    // (base * 10^times / 10^times)^expo = (base * 10^times)^expo / 0.1^expo^times
+    return pow(base, expo) / pow(pow(unsigned_number::exact(1) >> 1, expo), -times);
   }
   unsigned_number::rounding_for_digits(base, expo);
   auto i = expo.div_1().as_number();
-  unsigned_number res = unsigned_number::exact(1);
+  unsigned_number res = unsigned_number::to_number(1, base.valid_digits());
   unsigned_number x = unsigned_number::exact(1) - base;
   unsigned_number delta = expo * x;
   unsigned_number::valid_digits_t k = 2;

@@ -29,6 +29,10 @@ template <typename Ty> Ty string_to_integer(const char *s) {
     return std::stoi(s);
   if constexpr (std::is_same_v<Ty, unsigned short>) // No matched function
     return std::stoul(s);
+  if constexpr (std::is_same_v<Ty, signed char>) // No matched function
+    return std::stoi(s);
+  if constexpr (std::is_same_v<Ty, unsigned char>) // No matched function
+    return std::stoul(s);
   throw;
 }
 class unsigned_number {
@@ -327,41 +331,6 @@ public:
 
     return pos ? res : unsigned_number::exact(1) / res;
   }
-  constexpr friend unsigned_number pow(unsigned_number base, unsigned_number expo) {
-    // Maclaurin
-    // if base <= 1
-    //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
-    // else
-    //  base^expo = 1 / (1 / base)^expo
-    if (base.head_pos_in_digits() != 0) {
-      unsigned_number::digits_t times = base.head_pos_in_digits();
-      base <<= times;
-      // (base * 10^times / 10^times)^expo = (base * 10^times)^expo / 0.1^expo^times
-      return pow(base, expo) / pow(pow(unsigned_number::exact(1) >> 1, expo), -times);
-    }
-    unsigned_number::rounding_for_digits(base, expo);
-    auto i = expo.div_1().as_number();
-    if (i > std::numeric_limits<unsigned_number::valid_digits_t>::max())
-      throw std ::overflow_error("Exceeds valid_digits_t's limits.");
-    unsigned_number res = unsigned_number::exact(1);
-    unsigned_number x = unsigned_number::exact(1) - base;
-    unsigned_number delta = expo * x;
-    unsigned_number::digits_t k = 2;
-
-    const auto min = base.minimal() >> 1;
-    while (delta >= min) {
-      res -= delta;
-      unsigned_number K = unsigned_number::exact(k);
-      delta *= (unsigned_number::exact(k - 1) - expo);
-      delta /= K;
-      delta *= x;
-      ++k;
-    }
-    if (i)
-      return std::move(res) * pow(base, unsigned_number::valid_digits_t(i));
-    else
-      return res;
-  }
 
   std::string to_string() const {
     std::string s = std::to_string(valid_number);
@@ -370,53 +339,57 @@ public:
     s += std::to_string(digits - tail_pos - literal_1);
     return s;
   }
-  constexpr static inline unsigned_number::valid_digits_t char_to_number(char c) {
-    if (c < '0' || c > '9')
-      throw std::invalid_argument("Unexpected character.");
-    return c - '0';
-  }
-  // Support format:
-  // xxx.xxx
-  // xxx
-  // xxxey
-  // xxxEy
-  constexpr static inline unsigned_number to_number(const char *begin, const char *end = nullptr) {
-    using vn_t = unsigned_number::valid_number_t;
-    constexpr auto md = unsigned_number::max_digits10;
-    vn_t vn = 0;
-    bool find_dot = false;
-    unsigned_number::digits_t tail = 0;
-    valid_digits_t valid = 0;
-    while (begin != end && *begin) {
-      char c = *begin;
-      ++begin;
-      if ('0' <= c && c <= '9') {
-        if (valid <= md) {
-          (vn *= 10) += char_to_number(c);
-          if (c != '0')
-            ++valid;
-          if (find_dot)
-            ++tail;
-        }
-      } else if (c == '.') {
-        find_dot = true;
-        continue;
-      } else if (c == 'e' || c == 'E') {
-        if (*begin) {
-          auto n = string_to_integer<digits_t>(begin);
-          tail -= n;
-        }
-        break;
-      }
-    }
-    if (valid > md) {
-      assert(valid == md + 1);
-      --tail;
-      vn = round_div(vn, 10);
-    }
-    return unsigned_number(vn, tail);
-  }
+
+  constexpr friend unsigned_number to_number(const char *begin, const char *end);
 };
+constexpr static inline unsigned_number::valid_digits_t char_to_number(char c) {
+  if (c < '0' || c > '9')
+    throw std::invalid_argument("Unexpected character.");
+  return c - '0';
+}
+// Support format:
+// xxx.xxx
+// xxx
+// xxxey
+// xxxEy
+constexpr inline unsigned_number to_number(const char *begin, const char *end = nullptr) {
+  using vn_t = unsigned_number::valid_number_t;
+  using vd_t = unsigned_number::valid_digits_t;
+  using digits_t = unsigned_number::digits_t;
+  constexpr auto md = unsigned_number::max_digits10;
+  vn_t vn = 0;
+  bool find_dot = false;
+  unsigned_number::digits_t tail = 0;
+  vd_t valid = 0;
+  while (begin != end && *begin) {
+    char c = *begin;
+    ++begin;
+    if ('0' <= c && c <= '9') {
+      if (valid <= md) {
+        (vn *= 10) += char_to_number(c);
+        if (c != '0')
+          ++valid;
+        if (find_dot)
+          ++tail;
+      }
+    } else if (c == '.') {
+      find_dot = true;
+      continue;
+    } else if (c == 'e' || c == 'E') {
+      if (*begin) {
+        auto n = string_to_integer<digits_t>(begin);
+        tail -= n;
+      }
+      break;
+    }
+  }
+  if (valid > md) {
+    assert(valid == md + 1);
+    --tail;
+    vn = unsigned_number::round_div(vn, 10);
+  }
+  return unsigned_number(vn, tail);
+}
 
 constexpr static inline unsigned_number operator""_e_1(unsigned long long num) {
   using vn_t = unsigned_number::valid_number_t;
@@ -430,10 +403,8 @@ constexpr static inline unsigned_number operator""_num(
     throw std::out_of_range("Number far huger than limit.");
   return unsigned_number(static_cast<unsigned_number::valid_number_t>(v));
 }
-constexpr static inline unsigned_number operator""_num(const char *s) { return unsigned_number::to_number(s); }
-constexpr static inline unsigned_number operator""_num(const char *s, std::size_t n) {
-  return unsigned_number::to_number(s, s + n);
-}
+constexpr static inline unsigned_number operator""_num(const char *s) { return to_number(s); }
+constexpr static inline unsigned_number operator""_num(const char *s, std::size_t n) { return to_number(s, s + n); }
 std::ostream &operator<<(std::ostream &o, const unsigned_number &n) { return o << n.to_string(); }
 } // namespace fundamental
 } // namespace engineering

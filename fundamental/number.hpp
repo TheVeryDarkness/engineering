@@ -24,6 +24,10 @@ template <typename Ty> Ty string_to_integer(const char *s) {
     return std::stoull(s);
   if constexpr (std::is_same_v<Ty, unsigned int>) // No matched function
     return std::stoul(s);
+  if constexpr (std::is_same_v<Ty, short>) // No matched function
+    return std::stoi(s);
+  if constexpr (std::is_same_v<Ty, unsigned short>) // No matched function
+    return std::stoul(s);
   throw;
 }
 class unsigned_number {
@@ -108,6 +112,11 @@ private:
   constexpr valid_number_t approximate_for_digits(const unsigned_number &that) const {
     assert(that.digits >= digits);
     return that.as_if_remove_decimal(that.digits - digits);
+  }
+  constexpr unsigned_number &believe() {
+    if (valid())
+      valid_number *= pow10(max_digits10 - digits), digits = max_digits10;
+    return *this;
   }
 
 public:
@@ -296,9 +305,9 @@ public:
     s += std::to_string(digits - tail_pos - literal_1);
     return s;
   }
-  constexpr static inline unsigned_number::valid_number_t char_to_number(char c) {
+  constexpr static inline unsigned_number::valid_digits_t char_to_number(char c) {
     if (c < '0' || c > '9')
-      throw;
+      throw std::invalid_argument("Unexpected character.");
     return c - '0';
   }
   // Support format:

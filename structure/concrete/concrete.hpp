@@ -97,7 +97,7 @@ class rebar {
   const num d, _As;
 
 public:
-  rebar(num d) : d(d), _As(fundamental::pi_4 * d * d) {}
+  rebar(num d) : d(d), _As(pi_4 * d * d) {}
   num As() const { return _As; }
 };
 

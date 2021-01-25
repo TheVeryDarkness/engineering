@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <vector>
 namespace engineering {
 namespace fundamental {
 template <typename Ty> Ty string_to_integer(const char *s) {
@@ -268,7 +269,7 @@ public:
     return *this;
   }
 
-  constexpr valid_number_t as_number() {
+  constexpr valid_number_t as_number() const {
     if (tail_pos > 0)
       throw std::domain_error("Not a integer.");
     constexpr auto d10 = std::numeric_limits<valid_number_t>::digits10;
@@ -297,6 +298,70 @@ public:
   constexpr unsigned_number operator>>(digits_t d) const & { return unsigned_number(*this) <<= d; }
   constexpr unsigned_number operator<<(digits_t d) && { return *this <<= d; }
   constexpr unsigned_number operator>>(digits_t d) && { return *this >>= d; }
+
+#ifdef __cpp_lib_constexpr_vector
+  constexpr
+#endif // __cpp_lib_constexpr_vector
+      friend unsigned_number
+      pow(const unsigned_number base, unsigned_number::valid_digits_t expo) {
+    if (expo == 0)
+      return unsigned_number(1);
+    bool pos = expo > 0;
+    if (!pos)
+      expo = -expo;
+
+    // base^(2^0) base^(2^1) ... base^(2^(n-1))
+    std::vector<unsigned_number> dynamic = {base};
+    while ((1 << dynamic.size()) // pow(2, dynamic.size())
+           <= expo)
+      dynamic.push_back(dynamic.back() * dynamic.back());
+    unsigned_number res = dynamic.back();
+    dynamic.pop_back();
+    while (!dynamic.empty()) {
+      auto ex = 1 << (dynamic.size() - 1) // pow(2, dynamic.size() - 1)
+          ;
+      if (ex & expo) // ex <= expo
+        res *= dynamic.back(), expo -= ex;
+      dynamic.pop_back();
+    }
+
+    return pos ? res : unsigned_number::exact(1) / res;
+  }
+  constexpr friend unsigned_number pow(unsigned_number base, unsigned_number expo) {
+    // Maclaurin
+    // if base <= 1
+    //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
+    // else
+    //  base^expo = 1 / (1 / base)^expo
+    if (base.head_pos_in_digits() != 0) {
+      unsigned_number::digits_t times = base.head_pos_in_digits();
+      base <<= times;
+      // (base * 10^times / 10^times)^expo = (base * 10^times)^expo / 0.1^expo^times
+      return pow(base, expo) / pow(pow(unsigned_number::exact(1) >> 1, expo), -times);
+    }
+    unsigned_number::rounding_for_digits(base, expo);
+    auto i = expo.div_1().as_number();
+    if (i > std::numeric_limits<unsigned_number::valid_digits_t>::max())
+      throw std ::overflow_error("Exceeds valid_digits_t's limits.");
+    unsigned_number res = unsigned_number::exact(1);
+    unsigned_number x = unsigned_number::exact(1) - base;
+    unsigned_number delta = expo * x;
+    unsigned_number::digits_t k = 2;
+
+    const auto min = base.minimal() >> 1;
+    while (delta >= min) {
+      res -= delta;
+      unsigned_number K = unsigned_number::exact(k);
+      delta *= (unsigned_number::exact(k - 1) - expo);
+      delta /= K;
+      delta *= x;
+      ++k;
+    }
+    if (i)
+      return std::move(res) * pow(base, unsigned_number::valid_digits_t(i));
+    else
+      return res;
+  }
 
   std::string to_string() const {
     std::string s = std::to_string(valid_number);
@@ -352,6 +417,7 @@ public:
     return unsigned_number(vn, tail);
   }
 };
+
 constexpr static inline unsigned_number operator""_e_1(unsigned long long num) {
   using vn_t = unsigned_number::valid_number_t;
   assert(num <= std ::numeric_limits<vn_t>::max());

@@ -12,6 +12,7 @@
 int main() {
   using std::cout, std::endl;
   using namespace engineering::fundamental;
+  using namespace engineering;
   cout << "pi = " << pi << endl;
   cout << "pi / 4 = " << pi_4 << endl;
   cout << "pi ^ 2 = " << pow(pi, 2) << endl;

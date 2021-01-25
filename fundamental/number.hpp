@@ -34,13 +34,13 @@ class unsigned_number {
 public:
   using valid_number_t = std::uint64_t;
   using valid_digits_t = std::uint8_t;
-  using digits_t = std::int16_t;
-  constexpr static valid_digits_t max_digits10 = 6;
+  using digits_t = std::int8_t;
+  constexpr static valid_digits_t max_digits10 = 7;
 
 private:
-  valid_number_t valid_number : 45;
+  valid_number_t valid_number : 53;
   valid_digits_t digits : 3; // valid digits, positive
-  digits_t tail_pos : 16;    // positive for decimal, negative for post-zeros
+  digits_t tail_pos : 8;     // positive for decimal, negative for post-zeros
   constexpr static valid_digits_t literal_1 = 1;
   constexpr static valid_number_t pow10(valid_digits_t exp) noexcept {
     valid_number_t p = 1;

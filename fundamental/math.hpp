@@ -52,7 +52,7 @@ constexpr static inline unsigned_number pow(unsigned_number base, unsigned_numbe
   }
   unsigned_number::rounding_for_digits(base, expo);
   auto i = expo.div_1().as_number();
-  unsigned_number res = unsigned_number::to_number(1, base.valid_digits());
+  unsigned_number res = unsigned_number::exact(1);
   unsigned_number x = unsigned_number::exact(1) - base;
   unsigned_number delta = expo * x;
   unsigned_number::digits_t k = 2;

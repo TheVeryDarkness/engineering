@@ -55,7 +55,7 @@ constexpr static inline unsigned_number pow(unsigned_number base, unsigned_numbe
   unsigned_number res = unsigned_number::to_number(1, base.valid_digits());
   unsigned_number x = unsigned_number::exact(1) - base;
   unsigned_number delta = expo * x;
-  unsigned_number::valid_digits_t k = 2;
+  unsigned_number::digits_t k = 2;
 
   const auto min = base.minimal() >> 1;
   while (delta >= min) {

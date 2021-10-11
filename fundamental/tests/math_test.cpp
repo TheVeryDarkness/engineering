@@ -3,16 +3,18 @@
  */
 #include "../unsigned/math.hpp"
 #include <iostream>
-#define POW_TEST_INT(b, e)                                                                                             \
-  cout << #b "^" #e " = " << pow(b##_num, e) << endl                                                                   \
-       << #b "^" #e " = " << pow(b##_num, e##_num) << endl                                                             \
-       << #b "^" #e " = " << pow(b, e) << endl
-#define POW_TEST_DEC(b, e)                                                                                             \
-  cout << #b "^" #e " = " << pow(b##_num, e##_num) << endl << #b "^" #e " = " << pow(b, e) << endl
 int main() {
   using std::cout, std::endl;
   using namespace engineering::fundamental;
   using namespace engineering;
+
+#define POW_TEST_INT(b, e)                                                                                             \
+  cout << #b "^" #e " = " << pow(b##_num, e) << endl                                                                   \
+       << #b "^" #e " = " << pow(b##_num, e##_num) << endl                                                             \
+       << #b "^" #e " = " << std::pow(b, e) << endl
+#define POW_TEST_DEC(b, e)                                                                                             \
+  cout << #b "^" #e " = " << pow(b##_num, e##_num) << endl << #b "^" #e " = " << std::pow(b, e) << endl
+
   cout << "pi = " << pi << endl;
   cout << "pi / 4 = " << pi_4 << endl;
   cout << "pi ^ 2 = " << pow(pi, 2) << endl;

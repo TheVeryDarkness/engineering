@@ -75,11 +75,11 @@ constexpr inline unsigned_number pow(unsigned_number base, unsigned_number expo)
     if (base < unsigned_number::exact(1)) {
       auto &&inv_base = unsigned_number::exact(1) / base;
       auto &&log_inv_base = log(inv_base);
-      auto &&new_expo = expo * std::move(log_inv_base);
+      auto &&new_expo = std::move(log_inv_base) * expo;
       auto &&inv_res = exp(new_expo);
       return unsigned_number::exact(1) / std::move(inv_res);
     } else
-      return exp(expo * log(base));
+      return exp(log(base) * expo);
   }();
   return small * pow(base, unsigned_number::valid_digits_t(i));
 }

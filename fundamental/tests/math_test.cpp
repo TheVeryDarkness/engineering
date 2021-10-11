@@ -9,11 +9,20 @@ int main() {
   using namespace engineering;
 
 #define POW_TEST_INT(b, e)                                                                                             \
-  cout << #b "^" #e " = " << pow(b##_num, e) << endl                                                                   \
-       << #b "^" #e " = " << pow(b##_num, e##_num) << endl                                                             \
-       << #b "^" #e " = " << std::pow(b, e) << endl
+  {                                                                                                                    \
+    cout << #b "^" #e " = " << pow(b##_num, e) << endl                                                                 \
+         << #b "^" #e " = " << pow(b##_num, e##_num) << endl                                                           \
+         << #b "^" #e " = " << std::pow(b, e) << endl;                                                                 \
+  }
+
 #define POW_TEST_DEC(b, e)                                                                                             \
-  cout << #b "^" #e " = " << pow(b##_num, e##_num) << endl << #b "^" #e " = " << std::pow(b, e) << endl
+  {                                                                                                                    \
+    const auto right = std::pow(b, e);                                                                                 \
+    const unsigned_number calculated = pow(b##_num, e##_num);                                                          \
+    const auto calculated_as_float = calculated.as_float<double>();                                                    \
+    cout << #b "^" #e " = " << calculated << endl << #b "^" #e " = " << right << endl;                                 \
+    assert(std::abs(calculated_as_float - right) / right < 0.05);                                                      \
+  }
 
   cout << "pi = " << pi << endl;
   cout << "pi / 4 = " << pi_4 << endl;

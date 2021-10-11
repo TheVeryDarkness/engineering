@@ -3,6 +3,7 @@
  */
 #pragma once
 #include <cassert>
+#include <cmath>
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
@@ -133,6 +134,7 @@ public:
   // Automatic remove tails
   constexpr explicit unsigned_number(valid_number_t vn, digits_t decimal, std::nothrow_t)
       : valid_number(vn), digits(count_digits(vn)), tail_pos(decimal) {
+    assert(count_digits(vn) <= max_digits10);
     if (digits > max_digits10)
       remove_decimal(digits - max_digits10), digits = max_digits10;
   }
@@ -298,6 +300,8 @@ public:
     return valid_number * p10;
   }
 
+  template <typename T> constexpr T as_float() const { return T(valid_number) / std::pow<T>(10, tail_pos); }
+
   constexpr unsigned_number minimal() const { return {1, tail_pos}; }
 
   // mul 10^d
@@ -316,8 +320,11 @@ public:
   constexpr unsigned_number operator>>(digits_t d) && { return *this >>= d; }
 
   constexpr friend unsigned_number pow(const unsigned_number base, unsigned_number::valid_digits_t expo) {
-    if (expo == 0)
-      return unsigned_number(pow10(base.digits), base.digits);
+    if (expo == 0) {
+      unsigned_number::digits_t digits =
+          std::min<unsigned_number::digits_t>(unsigned_number::max_digits10 - 1U, base.digits);
+      return unsigned_number(pow10(digits), digits);
+    }
     bool pos = expo > 0;
     if (!pos)
       expo = -expo;

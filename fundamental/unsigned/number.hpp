@@ -315,13 +315,9 @@ public:
   constexpr unsigned_number operator<<(digits_t d) && { return *this <<= d; }
   constexpr unsigned_number operator>>(digits_t d) && { return *this >>= d; }
 
-#ifdef __cpp_lib_constexpr_vector
-  constexpr
-#endif // __cpp_lib_constexpr_vector
-      friend unsigned_number
-      pow(const unsigned_number base, unsigned_number::valid_digits_t expo) {
+  constexpr friend unsigned_number pow(const unsigned_number base, unsigned_number::valid_digits_t expo) {
     if (expo == 0)
-      return unsigned_number(1);
+      return unsigned_number(pow10(base.digits), base.digits);
     bool pos = expo > 0;
     if (!pos)
       expo = -expo;

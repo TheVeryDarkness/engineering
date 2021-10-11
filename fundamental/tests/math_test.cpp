@@ -19,20 +19,17 @@ int main() {
   cout << "pi / 4 = " << pi_4 << endl;
   cout << "pi ^ 2 = " << pow(pi, 2) << endl;
 
-  {
-    auto _0 = exp(0.80_num);
-    cout << _0 << endl;
-  }
-
   POW_TEST_INT(0.3, 4);
   POW_TEST_INT(0.30, 4);
   POW_TEST_INT(0.30, 6);
+  POW_TEST_INT(0.8, 64);
   POW_TEST_INT(0.9, 64);
   POW_TEST_INT(0.90, 64);
   POW_TEST_INT(0.900, 64);
   POW_TEST_INT(0.9000, 64);
   POW_TEST_INT(5, 4);
   POW_TEST_DEC(5.0, 4.0);
+  POW_TEST_DEC(5.00, 4.0);
   POW_TEST_DEC(5.10, 4.00);
   POW_TEST_DEC(5.134, 4.000);
 

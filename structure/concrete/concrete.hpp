@@ -19,16 +19,16 @@ class concrete {
 protected:
   static num alpha1(num::valid_number_t fcuk) {
     using namespace fundamental;
-    return fcuk <= 50 ? num(76, 2)                              // 0.76
-                      : fcuk >= 80 ? num(82, 2)                 // 0.82
-                                   : num(fcuk - 50) * num(2, 3) // (0.82 - 0.76) / (80 - 50) = 0.002
+    return fcuk <= 50   ? num(76, 2)                 // 0.76
+           : fcuk >= 80 ? num(82, 2)                 // 0.82
+                        : num(fcuk - 50) * num(2, 3) // (0.82 - 0.76) / (80 - 50) = 0.002
         ;
   }
   static num alpha2(num::valid_number_t fcuk) {
     using namespace fundamental;
-    return fcuk <= 40 ? "1.00"_num                               // 1.00
-                      : fcuk >= 80 ? "0.87"_num                  // 0.87
-                                   : num(fcuk - 40) * num(32, 4) //(1.00 - 0.87) / (80 - 40) = 0.00325 = 0.0032
+    return fcuk <= 40   ? "1.00"_num                  // 1.00
+           : fcuk >= 80 ? "0.87"_num                  // 0.87
+                        : num(fcuk - 40) * num(32, 4) //(1.00 - 0.87) / (80 - 40) = 0.00325 = 0.0032
         ;
   }
   // p.22 2-4

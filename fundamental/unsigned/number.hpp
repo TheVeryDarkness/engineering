@@ -126,13 +126,13 @@ private:
 
 public:
   constexpr unsigned_number(valid_number_t vn, digits_t decimal)
-      : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
+      : valid_number(vn), digits(count_digits(vn)), tail_pos(decimal) {
     if (digits > max_digits10)
       throw std::out_of_range("Out of digits Limits.");
   }
   // Automatic remove tails
   constexpr explicit unsigned_number(valid_number_t vn, digits_t decimal, std::nothrow_t)
-      : valid_number(vn), tail_pos(decimal), digits(count_digits(vn)) {
+      : valid_number(vn), digits(count_digits(vn)), tail_pos(decimal) {
     if (digits > max_digits10)
       remove_decimal(digits - max_digits10), digits = max_digits10;
   }
@@ -185,7 +185,7 @@ public:
     else if (that.valid_number == 0 || digits - tail_pos > that.digits - that.tail_pos)
       return false;
     else
-      return valid_number * pow10(that.digits - digits) < that.valid_number;
+      return valid_number * pow10(that.digits) < that.valid_number * pow10(digits);
   }
   constexpr bool operator>(const unsigned_number &that) const { return that < *this; }
   constexpr bool operator<=(const unsigned_number &that) const { return !(that < *this); }

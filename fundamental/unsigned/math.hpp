@@ -8,9 +8,14 @@ namespace engineering {
 namespace fundamental {
 constexpr static inline auto str_pi = "3.14159265358979323846";
 constexpr static inline auto str_e = "2.718281828459045";
+
 constexpr static inline auto pi = to_number(str_pi);
-constexpr static inline auto pi_4 = pi / unsigned_number::exact(4);
 constexpr static inline auto e = to_number(str_e);
+
+constexpr static inline auto ln2 = to_number("0.693147180559945");
+constexpr static inline auto ln10 = to_number("2.302585092994046");
+
+constexpr static inline auto pi_4 = pi / unsigned_number::exact(4);
 
 constexpr inline unsigned_number exp(unsigned_number x) {
   // Maclaurin
@@ -38,29 +43,45 @@ constexpr inline unsigned_number exp(unsigned_number x) {
 constexpr inline unsigned_number log(unsigned_number x) {
   if (x < unsigned_number::exact(1))
     throw std::underflow_error("Result is not a positive number.");
-  unsigned_number::digits_t times = -1 - x.head_pos_in_digits();
-  assert(times >= 0);
-  x >> times; // 1.xxx
-
-  const unsigned_number t = (x - unsigned_number::exact(1)) / (x + unsigned_number::exact(1));
-  auto res = t, delta = t;
-  unsigned_number::digits_t k = 1;
-  while (delta >= res.minimal()) {
-    (delta *= t) *= t;
-    res += delta / unsigned_number::exact(k * 2 + 1);
+  const unsigned_number _1 = unsigned_number::exact(1);
+  const unsigned_number _2 = unsigned_number::exact(2);
+  unsigned_number::digits_t times = 0;
+  // Convert x to (0.5, 1]
+  while (x > _1) {
+    x /= _2;
+    ++times;
   }
-  return unsigned_number::exact(2) * res;
+
+  const unsigned_number t = unsigned_number::exact(1) - x;
+  auto res = t, delta = t;
+  unsigned_number::digits_t k = 2;
+  while (delta >= res.minimal()) {
+    delta *= t;
+    res += delta / unsigned_number::exact(k);
+    ++k;
+  }
+  return unsigned_number::exact(times) * ln2 - res;
 }
 constexpr inline unsigned_number pow(unsigned_number base, unsigned_number expo) {
+  auto i = expo.div_1().as_number();
+  if (i > std::numeric_limits<unsigned_number::valid_digits_t>::max())
+    throw std ::overflow_error("Exceeds valid_digits_t's limits.");
   // Maclaurin
   // if base <= 1
   //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
   // else
   //  base^expo = 1 / (1 / base)^expo
-  if (base < unsigned_number::exact(1))
-    return unsigned_number::exact(1) / exp(expo * log(unsigned_number::exact(1) / base));
-  else
-    return exp(expo * log(base));
+  auto small = [&base, &expo]() {
+    if (base < unsigned_number::exact(1)) {
+      auto &&inv_base = unsigned_number::exact(1) / base;
+      auto &&log_inv_base = log(inv_base);
+      auto &&new_expo = expo * std::move(log_inv_base);
+      auto &&inv_res = exp(new_expo);
+      return unsigned_number::exact(1) / std::move(inv_res);
+    } else
+      return exp(expo * log(base));
+  }();
+  return small * pow(base, unsigned_number::valid_digits_t(i));
 }
 } // namespace fundamental
 } // namespace engineering

@@ -2,8 +2,8 @@
  * UTF-8 encoding.
  */
 #pragma once
-#include "math.hpp"
-#include "number.hpp"
+#include "../fundamental/unsigned/math.hpp"
+#include "../fundamental/unsigned/number.hpp"
 #include <optional>
 namespace engineering {
 namespace structure {

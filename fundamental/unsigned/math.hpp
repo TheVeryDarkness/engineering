@@ -8,12 +8,14 @@ namespace engineering {
 namespace fundamental {
 constexpr static inline auto str_pi = "3.14159265358979323846";
 constexpr static inline auto str_e = "2.718281828459045";
+constexpr static inline auto str_ln2 = "0.693147180559945";
+constexpr static inline auto str_ln10 = "2.302585092994046";
 
 constexpr static inline auto pi = to_number(str_pi);
 constexpr static inline auto e = to_number(str_e);
 
-constexpr static inline auto ln2 = to_number("0.693147180559945");
-constexpr static inline auto ln10 = to_number("2.302585092994046");
+constexpr static inline auto ln2 = to_number(str_ln2);
+constexpr static inline auto ln10 = to_number(str_ln10);
 
 constexpr static inline auto pi_4 = pi / unsigned_number::exact(4);
 

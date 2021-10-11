@@ -1,6 +1,7 @@
 #include "../number.hpp"
 #include <iostream>
-using engineering::fundamental::unsigned_number, engineering::fundamental::operator""_num;
+using engineering::fundamental::unsigned_number, engineering::fundamental::operator""_num,
+    engineering::fundamental::operator""_exact;
 using std::cout, std::endl;
 void add_test(unsigned_number a, unsigned_number b) { cout << a << " + " << b << " = " << a + b << endl; }
 void minus_test(unsigned_number a, unsigned_number b) { cout << a << " - " << b << " = " << a - b << endl; }
@@ -33,6 +34,8 @@ int main() noexcept {
     mul_test("0.004"_num, "0.0004"_num);
     mul_test("0.0004"_num, "0.004"_num);
 
+    div_test(0_num, "0.001"_num);
+    div_test(0_exact, "0.001"_num);
     div_test("0.001"_num, "0.001"_num);
     div_test("0.001"_num, "0.0001"_num);
     div_test("0.0001"_num, "0.001"_num);

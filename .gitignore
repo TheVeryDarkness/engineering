@@ -1,5 +1,6 @@
 .vs/**
 .vscode/**
+.VSCodeCounter/**
 out/**
 build/**
 CMakeSettings.json

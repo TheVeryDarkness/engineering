@@ -17,6 +17,11 @@ int main() {
   cout << "pi / 4 = " << pi_4 << endl;
   cout << "pi ^ 2 = " << pow(pi, 2) << endl;
 
+  {
+    auto _0 = exp(0.80_num);
+    cout << _0 << endl;
+  }
+
   POW_TEST_INT(0.3, 4);
   POW_TEST_INT(0.30, 4);
   POW_TEST_INT(0.30, 6);

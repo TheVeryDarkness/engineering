@@ -225,6 +225,8 @@ public:
   constexpr unsigned_number &operator/=(const unsigned_number &that) {
     if (!that.valid())
       throw std::invalid_argument("Divided by 0.");
+    if (!this->valid())
+      return *this;
     if (that.digits >= digits) {
       valid_number *= pow10(digits);
       valid_number = round_div(valid_number, approximate_for_digits(that));
@@ -246,19 +248,29 @@ public:
   constexpr unsigned_number operator-(const unsigned_number &that) const & { return unsigned_number(*this) -= that; }
   constexpr unsigned_number operator*(const unsigned_number &that) const & { return unsigned_number(*this) *= that; }
   constexpr unsigned_number operator/(const unsigned_number &that) const & { return unsigned_number(*this) /= that; }
+
+  constexpr unsigned_number operator+(unsigned_number &&that) const & { return that += *this; }
+  constexpr unsigned_number operator*(unsigned_number &&that) const & { return that *= *this; }
+
+  constexpr unsigned_number &&operator+(unsigned_number &&that) && { return std::move(*this += that); }
+  constexpr unsigned_number &&operator*(unsigned_number &&that) && { return std::move(*this *= that); }
+
   constexpr unsigned_number operator+(const unsigned_number &that) && { return *this += that; }
   constexpr unsigned_number operator-(const unsigned_number &that) && { return *this -= that; }
   constexpr unsigned_number operator*(const unsigned_number &that) && { return *this *= that; }
   constexpr unsigned_number operator/(const unsigned_number &that) && { return *this /= that; }
 
+  // Divide this number by 1.
+  // This function will modify the object.
+  // Remainder is remained in the number, and the quotient is returned.
   constexpr unsigned_number div_1() {
-    if (digits - tail_pos > 0) {
-      if (tail_pos > 0) {
+    if (digits - tail_pos > 0) { // Greater than 1
+      if (tail_pos > 0) {        // Not an integer
         auto [quo, rem] = builtin_div(valid_number, pow10(tail_pos));
         valid_number = rem;
         adjust_valid_digits();
         return unsigned_number(quo);
-      } else {
+      } else { // An integer
         auto copy = *this;
         valid_number = 0;
         digits = 0;
@@ -395,6 +407,13 @@ constexpr static inline unsigned_number operator""_e_1(unsigned long long num) {
   using vn_t = unsigned_number::valid_number_t;
   assert(num <= std ::numeric_limits<vn_t>::max());
   return unsigned_number(static_cast<vn_t>(num), 1);
+}
+constexpr static inline unsigned_number operator""_exact(
+    // Should be unsigned_number::valid_number_t
+    unsigned long long v) {
+  if (v > std::numeric_limits<unsigned_number::valid_number_t>::max())
+    throw std::out_of_range("Number far huger than limit.");
+  return unsigned_number::exact(static_cast<unsigned_number::valid_number_t>(v));
 }
 constexpr static inline unsigned_number operator""_num(
     // Should be unsigned_number::valid_number_t

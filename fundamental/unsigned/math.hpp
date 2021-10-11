@@ -40,6 +40,21 @@ constexpr inline unsigned_number exp(unsigned_number x) {
   else
     return res;
 }
+
+constexpr inline unsigned_number log_adjusted(unsigned_number x) {
+  if (x > unsigned_number::exact(1) || x < unsigned_number::exact(5) >> 1)
+    throw std::invalid_argument("Argument should be within the range of [0.5, 1].");
+
+  const unsigned_number t = unsigned_number::exact(1) - x;
+  auto res = t, delta = t;
+  unsigned_number::digits_t k = 2;
+  while (delta >= res.minimal()) {
+    delta *= t;
+    res += delta / unsigned_number::exact(k);
+    ++k;
+  }
+  return res;
+}
 constexpr inline unsigned_number log(unsigned_number x) {
   if (x < unsigned_number::exact(1))
     throw std::underflow_error("Result is not a positive number.");
@@ -52,16 +67,23 @@ constexpr inline unsigned_number log(unsigned_number x) {
     ++times;
   }
 
-  const unsigned_number t = unsigned_number::exact(1) - x;
-  auto res = t, delta = t;
-  unsigned_number::digits_t k = 2;
-  while (delta >= res.minimal()) {
-    delta *= t;
-    res += delta / unsigned_number::exact(k);
-    ++k;
-  }
-  return unsigned_number::exact(times) * ln2 - res;
+  return unsigned_number::exact(times) * ln2 - log_adjusted(x);
 }
+constexpr inline unsigned_number nlog(unsigned_number x) {
+  if (x > unsigned_number::exact(1))
+    throw std::underflow_error("Result is not a positive number.");
+  const unsigned_number _0_5 = unsigned_number::exact(5) >> 1;
+  const unsigned_number _2 = unsigned_number::exact(2);
+  unsigned_number::digits_t times = 0;
+  // Convert x to (0.5, 1]
+  while (x <= _0_5) {
+    x *= _2;
+    ++times;
+  }
+
+  return unsigned_number::exact(times) * ln2 + log_adjusted(x);
+}
+
 constexpr inline unsigned_number pow(unsigned_number base, unsigned_number expo) {
   auto i = expo.div_1().as_number();
   if (i > std::numeric_limits<unsigned_number::valid_digits_t>::max())
@@ -71,11 +93,13 @@ constexpr inline unsigned_number pow(unsigned_number base, unsigned_number expo)
   //  base^expo = (1 + (base - 1))^expo = (1 + ... + (expo * ... * (expo - k + 1) / k!) * (base - 1)^n + ...)
   // else
   //  base^expo = 1 / (1 / base)^expo
+  //
+  // a^x = e^(x ln(a))
+  // a^x = 1 / (1/a)^x = 1 / e^(- x ln(a))
   auto small = [&base, &expo]() {
     if (base < unsigned_number::exact(1)) {
-      auto &&inv_base = unsigned_number::exact(1) / base;
-      auto &&log_inv_base = log(inv_base);
-      auto &&new_expo = std::move(log_inv_base) * expo;
+      auto &&neg_log_base = nlog(base);
+      auto &&new_expo = std::move(neg_log_base) * expo;
       auto &&inv_res = exp(new_expo);
       return unsigned_number::exact(1) / std::move(inv_res);
     } else

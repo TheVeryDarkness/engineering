@@ -21,7 +21,7 @@ int main() {
     const unsigned_number calculated = pow(b##_num, e##_num);                                                          \
     const auto calculated_as_float = calculated.as_float<double>();                                                    \
     cout << #b "^" #e " = " << calculated << endl << #b "^" #e " = " << right << endl;                                 \
-    assert(std::abs(calculated_as_float - right) / right < 0.05);                                                      \
+    assert(std::abs(calculated_as_float - right) / right < 0.01);                                                      \
   }
 
   cout << "pi = " << pi << endl;
@@ -52,5 +52,8 @@ int main() {
   POW_TEST_DEC(0.100000, 0.500000);
   POW_TEST_DEC(0.1000000, 0.5000000);
   POW_TEST_DEC(0.01000, 0.5000);
-  POW_TEST_DEC(0.1340, 2.5);
+  POW_TEST_DEC(0.1340, 2.50000);
+  POW_TEST_DEC(0.1340, 13);
+  POW_TEST_DEC(0.0134000, 0.500000);
+  POW_TEST_DEC(0.01340000, 0.5000000);
 }

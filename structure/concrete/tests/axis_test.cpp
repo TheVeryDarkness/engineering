@@ -5,8 +5,8 @@ int main() {
   using namespace engineering::structure::concrete;
   using namespace engineering::fundamental;
   //
-  concrete c("2.51e4"_num, "30.8"_num, "1.97"_num);
-  steel s("2.05e5"_num, 376_num, {}, 681_num);
+  concrete c(2.51e4_num, 30.8_num, 1.97_num);
+  steel s(2.05e5_num, 376_num, {}, 681_num);
   rebar b(19.0_num);
   rectangle r(152_num, 152_num, b.As());
   longitudinal_rebar_rectangle_section example(b, r, c, s);

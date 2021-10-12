@@ -16,6 +16,7 @@ build/**
 *.fdb_latexmk
 *.fls
 *.log
+*.out
 *.synctex.gz
 *.pdf
 *.toc

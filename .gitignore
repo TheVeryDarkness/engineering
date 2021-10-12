@@ -1,8 +1,21 @@
+# Cache and user settings
 .cache/**
 .vs/**
 .vscode/**
 .VSCodeCounter/**
+
+# Configuration
+CMakeSettings.json
+
+# Build
 out/**
 build/**
-CMakeSettings.json
+
+# Latex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
 *.pdf
+*.toc

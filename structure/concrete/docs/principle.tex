@@ -2,7 +2,7 @@
 \usepackage{amsmath}
 \usepackage{enumerate}
 \usepackage{geometry}
-%\usepackage{hyperref}
+\usepackage{hyperref}
 \usepackage{lmodern}
 \usepackage{pgfplots}
 \usepackage{physics}
@@ -248,10 +248,66 @@ $$\tau=\derivative{\sigma_s}{x}\frac{A_s}{\mu_s}$$
 \par拔出试验中，如果钢筋埋入长度足够短，就可以近似认为粘结应力沿钢筋纵轴方向均匀分布，可以在一部分长度上加设套管，保证部分区域内钢筋与混凝土之间无粘结，来测试钢筋与混凝土之间的粘结强度。记测得的拔出拉力为$T_u$，钢筋的埋置长度为$l_c$，则
 $$\tau_u=\frac{T_u}{\mu_sl_c}$$
 \subsubsection{影响粘结强度的因素}
+\par粘结强度随\underline{混凝土强度}等级的提高而提高，且与劈裂抗拉强度近似成正比。
+\par\underline{浇筑深度}超过300mm的“顶部”水平钢筋，由于钢筋底面的混凝土水分析出、气泡逸出和混凝土泌水下沉等而不能与钢筋紧密接触，粘结作用削弱，要比竖位钢筋和“底部”钢筋低20\%\texttildelow30\%。
+\par带肋钢筋具有比光圆钢筋更高的粘结强度，但主要危险是产生劈裂裂缝而非发生滑移。增大混凝土\underline{保护层厚度}和保持一定的钢筋净距，可以提高外围混凝土的劈裂抗力，保证粘结强度。
+\par横向钢筋能延缓内裂缝的发展，提高粘结强度、限制到达构件表面的劈裂裂缝的宽度。因此搭接区和较大直径钢筋的锚固区内，均应设置一定数量的横向钢筋（如环状箍筋）；当一排并列钢筋的根数较多时，还应设置附加钢箍以防止保护层混凝土的劈裂剥落。
+\par当钢筋的锚固区作用有横向压应力时，其能制约混凝土的横向变形，增大摩阻力，可以抵抗滑动，进而提高粘结强度。因此在直接支承的支座处可以适当减小锚固长度。
+\par带肋钢筋的外形特征对粘结强度有不显著的影响。
+\subsection{钢筋在混凝土中的锚固长度}
+\subsubsection{锚固长度的理论分析}
+\par保证锚固可靠就是要求钢筋屈服时锚固仍未破坏，通常需要将钢筋在混凝土中延伸一段长度，即锚固长度。确定锚固长度的基本原则是钢筋受力屈服时正好发生锚固破坏。
+\par拔出试验是确定钢筋锚固长度最直接的办法。根据
+\subsection{实用的锚固长度计算公式}
+\par下式中$\alpha$的值大约是$1/6$。
+$$l_a=\alpha \frac{f_y}{f_t}d$$
+\section{轴心受力构件的性能与计算}
+\subsection{工程实例及构件的配筋形式}
+\par纵向钢筋的目的是\begin{enumerate}
+    \item 协助混凝土承受压力以减小构件截面尺寸；
+    \item 承受可能有的不大的弯矩；
+    \item 防止构件突然脆性破坏。
+\end{enumerate}
+\subsection{轴心受拉构件的受力分析}
+\subsubsection{轴力受拉构件试验研究}
+\par开裂前、开裂后、屈服三个阶段。
+\par裂缝处的混凝土不再承受拉力。
+\subsubsection{轴向拉力与变形的关系}
+\par弹性模量比$\alpha_E=E_s/E_c$
+\par构件截面积。
+\par等效截面积$A_0=(1+\alpha_E\rho)$
+\par开裂荷载$N_{tcr}=E_cA(1+\alpha_E\rho)\epsilon_{t0}$
+\par极限荷载$N_{tu}=f_yA_s$
+\subsection{轴心受拉构件承载力计算公式的应用}
+\subsubsection{既有构件轴心抗拉承载力计算}
+\par取开裂荷载和极限荷载的最大值。
+\subsubsection{基于承载力的构件截面设计}
+$\rho_{min=\frac{A_{smin}}{A}}\approx\frac{f_t}{f_y}$
+\subsection{轴心受压短柱的受力分析}
+\subsubsection{短柱的试验研究}
+\par屈服前、屈服后直至开裂两个阶段。
+\subsubsection{短柱压力与变形的关系}
+\par混凝土压力与变形的关系$N_c^c=1000\epsilon(1-250\epsilon)f_cA$
+\subsubsection{荷载长期作用下短柱的受力性能}
+\par徐变系数$C_t=\frac{\epsilon_{cr}}{\epsilon_i}$
+\subsection{轴心受压长柱的受力分析}
+\subsubsection{长柱的试验研究}
+\subsubsection{稳定系数}
+\subsubsection{轴心受压柱的承载力计算公式}
+\par$N_{cu}=\varphi)f_cA+f_y^{\prime}A_s^{\prime}$
+\subsection{轴心受压构件承载力计算公式的应用}
+\subsubsection{既有构件轴心抗压承载力计算}
+\subsubsection{基于承载力的构件截面设计}
+\subsection{配有纵筋和螺旋筋轴心受压柱的受力分析}
+\subsubsection{螺旋筋柱的轴心受压试验研究}
+\subsubsection{螺旋筋柱的承载力计算}
+\par$f_{cc}=f_c+4\alpha\sigma_r$
+\par由$2f_yA_{ss1}=\sigma_rsd_{cor}$，$\sigma_r=\frac{2f_yA_{ss1}}{sd_{cor}}=\frac{f_yA_{ss0}}{2A_{cor}}$
+\par$N_{cu}=f_{cc}A_{cor}+f_y^{\prime}A_s^{\prime}=f_cA_{cor}+f_y^{\prime}A_s^{\prime}+2f_yA_{ss0}$
 \appendix
 \newpage
 %\newcommand{\ans}{\setlength{\parindent}{-2em}\par答：\setlength{\parindent}{0em}}
-\newcommand{\ans}{\par\noindent答：\setlength{\parindent}{2em}}
+\newcommand{\ans}{\par\noindent答：}
 %\newcommand{\ans}{\par答：}
 \section{思考题}
 \begin{enumerate}
@@ -293,6 +349,239 @@ $$\tau_u=\frac{T_u}{\mu_sl_c}$$
               \item 混凝土的徐变和收缩对钢筋混凝土构件的受力状态各有何影响？
                     \ans徐变会加大构件的变形、引起钢筋混凝土截面（或其他组合截面）应力重分布、引起预应力损失。收缩可能造成裂缝，影响观瞻且不利于构件使用性能和耐久性能。
           \end{enumerate}
+    \item  \begin{enumerate}[1.]
+              \item 什么是钢筋与混凝土之间的粘结作用？有哪些类型？
+                    \ans粘结作用是指钢筋和混凝土之间通过接触面上剪应力避免变形差从而共同工作的作用。
+              \item 钢筋与混凝土间的粘结力有哪几部分组成？哪一种作用为主要作用？
+                    \ans 光圆钢筋与混凝土的粘结作用由三部分组成：\begin{enumerate}
+                        \item 混凝土中水泥胶体与钢筋表面的化学胶着力；
+                        \item 钢筋与混凝土接触面上的摩擦力；（主要）
+                        \item 钢筋表面粗糙不平产生的机械咬合作用。（主要）
+                    \end{enumerate}
+                    \par带肋钢筋与混凝土的粘结作用也由三部分组成：\begin{enumerate}
+                        \item 混凝土中水泥胶体与钢筋表面的化学胶着力；
+                        \item 钢筋与混凝土接触面上的摩擦力；
+                        \item 钢筋表面凸出的肋与混凝土的机械咬合作用。（主要）
+                    \end{enumerate}
+              \item 带肋钢筋的粘结破坏形态有哪些？
+                    \ans 径向分量引起梁底或梁侧的纵向裂缝，纵向分量引起的混凝土撕裂、局部挤碎或刮出式破坏。
+              \item 影响钢筋与混凝土之间的粘结强度的主要因素有哪些？
+                    \ans 混凝土强度、浇注位置、保护层厚度、钢筋净距离、横向配筋及侧向压应力等。
+              \item 确定基本锚固长度的原则是什么？如何确定钢筋的基本锚固长度？
+                    \ans 原则是要求钢筋屈服时仍未出现锚固破坏。确定钢筋的基本锚固长度最直接的方法是拔出试验。
+              \item 对水平浇筑的钢筋混凝土梁，其顶部钢筋与混凝土间的粘结强度和底部钢筋与混凝土间的粘结强度相比有何区别？为什么？
+                    \ans顶部混凝土由于水分、气泡的逸出和混凝土泌水下沉，相对较疏松，削弱了粘结作用。
+              \item 两根钢筋在混凝土中搭接时是否允许钢筋并拢？为什么？
+                    \ans不允许。钢筋之间并没有直接的粘结作用，需要借助与混凝土之间的粘结将力传给另外一端。
+              \item 钢筋传递长度$l_{tr}$和锚固长度$l_a$之间的区别和联系是什么？
+                    \ans传递长度是保证钢筋将给定的拉力传递给混凝土时保证锚固所需的长度，锚固长度则是在钢筋屈服时保证锚固所需的长度。
+                    \par最小的锚固长度就是钢筋屈服时的传递长度。
+              \item 由钢筋混凝土墙体中伸出的一钢筋混凝土悬臂梁在悬臂端承受集中荷载$P$如图3-12所示。梁的长度为$0.8l_a$。$l_a$由式(3-14)确定。根据材料的强度以及埋置在混凝土中钢筋的直径，你认为此梁的设计合理吗？为什么？
+                    \ans基本锚固长度为$l_a=\alpha\frac{f_y}{f_t}d$，估计为30到40倍直径，而图中锚固长度为$15d+0.4l_a\approx30d$，设计不合理。
+          \end{enumerate}
+    \item \begin{enumerate}[1.]
+              \item 为什么轴心受拉构件开裂后，当裂缝增至一定数量时，不再出现新的裂缝？
+                    \ans此时混凝土基本上已经退出工作，尤其是裂缝处混凝土不受拉力，总体上混凝土所受拉力很小，不再破坏。
+              \item 如何确定受拉构件的开裂荷载和极限荷载？
+                    \ans先将混凝土的开裂应变（钢筋屈服应变大于混凝土开裂应变）作为总体应变算出开裂荷载，再假设钢筋屈服时混凝土已经开裂算出（钢筋受拉屈服）极限荷载，并与开裂荷载比较。如果开裂荷载更大，说明混凝土开裂后钢筋随即屈服，为少筋构件，极限荷载为开裂荷载，否则极限荷载为原先算出的极限荷载。
+              \item 在轴心受压短柱的短期荷载试验中，随着荷载的增加，钢筋的应力增长速度和混凝土的应力增长速度哪个快？为什么？
+                    \ans钢筋屈服之前钢筋更快，之后钢筋应力变化不大，混凝土更快。加压过程中，钢筋的弹性模量更大且几乎不变，而混凝土的弹性模量随着应变增大接近线性地下降。
+              \item 如何确定轴心受压短柱的极限承载力？为什么在轴压构件中不宜采用高强钢材？
+                    \ans即混凝土即将压碎时柱的承载力，用混凝土受压极限应变结合钢筋弹性模量和屈服强度计算即可。如果钢材强度过高，比如一般构件中超过$400MP_a$时，混凝土压碎时混凝土尚未屈服，强度得不到充分发挥。
+              \item 构件设计时，为什么要控制轴心受力构件的最小配筋率？如何确定轴心受拉和轴心受压构件的最小配筋率？
+                    \ans因为轴心受力构件中混凝土为主要部分且为脆性破坏，而钢筋屈服应变大于混凝土极限应变，为了混凝土破坏时构件即破坏、保留预警空间，需要让钢筋有一定独立工作的能力，也就要求配筋率足够大。
+                    \par确定最小配筋率的原则是混凝土破坏时钢筋未屈服（并且最好有一定预留值）。
+              \item 配有普通箍筋的钢筋混凝土轴心受压构件中，箍筋的作用主要是什么？
+                    \ans约束混凝土变形，提高承载力。
+              \item 钢筋混凝土轴心受压构件在长期荷载作用下，随着荷载作用时间的增长，钢筋的应力和混凝土的应力各发生什么变化》混凝土的徐变是否会影响短柱的承载力？
+                    \ans由于混凝土徐变更大，混凝土的应力减小，钢筋的应力增大。如果钢筋强度较高，混凝土开裂时钢筋未屈服，则反而会使承载力提高，否则不变；但是如果卸去压力，混凝土中会出现拉应力，可能导致开裂，影响使用。
+              \item 钢筋混凝土轴心受压构件的承载力计算公式为什么要考虑稳定系数$\varphi$，稳定系数$\varphi$与构件两端的约束情况有何关系？
+                    \ans长细比较大时丧失承载力可能是因为失稳而不是破坏。约束越强，稳定系数越大。
+              \item 为什么长细比$l_c/b>12$的螺旋筋柱，不考虑螺旋筋对柱承载力的有利作用？
+                    \ans此时主要考虑失稳情况，
+              \item 如箍筋能起到约束混凝土的横向变形作用，则轴心受压短柱的承载力将发生什么变化？为什么？
+                    \ans提高。三向受压。
+          \end{enumerate}
 \end{enumerate}
 \section{习题}
+\begin{enumerate} %Chapter
+    \setcounter{enumi}{3}
+    \item  \begin{enumerate}[1.]
+              \item  配筋率$\rho=\frac{A_s}{A}=\frac{\pi\cross 10^2\cross 8}{300\cross 400}=2.09\%<3\%$
+                    \par弹性模量比值$\alpha_E=\frac{E_s}{E_c}=10$
+                    \par$\epsilon_{t0}=\frac{f_t}{E_c}=9.52\cross10^{-5}$
+                    \par开裂时
+                    \begin{align*}
+                        N_{tcr} & = E_cA_0\epsilon_{t0}=E_cA(1+\alpha_E\rho)\epsilon_{t0}                     \\
+                                & = 2.1\cross10^4300\cross400\cross(1+0.0209\cross10)\cross0.52\cross 10^{-5} \\
+                                & = 290.04kN
+                    \end{align*}
+                    \par破坏$N_{tu}=f_yAs=678.24kN$
+              \item \begin{enumerate}
+                        \item 配筋率 $\rho = \frac{A_s}{A}=\frac{615}{250\cross300}=1.025\%<3\%$
+                              \par弹性模量比$\alpha_E=\frac{E_s}{E_c}=8.24$
+                              \par$\epsilon_{t0}=\frac{f_t}{E_c}=1.16\cross10^{-4}$
+                              \par$\epsilon=\frac{\Delta l}{l}=\frac{0.2}{2000}=10^{-4}<\epsilon_{t0}$。钢筋与混凝土均受力
+                              \par$N=E_cA(1+\alpha_E\rho\epsilon)=165.92kN$
+                              \par其中，混凝土$N_t=E_cA\epsilon=153kN$，钢筋$N_s=E_sA_s\epsilon=12.92kN$
+                        \item $\Delta l_{tcr}=\epsilon_{t0}l=0.232mm<0.5mm$，混凝土开裂，仅由钢筋承受拉力。
+                              \par外荷载$N_t=E_sA_s\epsilon=32.29kN$
+                              \par钢筋应力$\sigma_s=E_s\epsilon=52.5N/mm^2$，而$N_t=0$
+                        \item $N_tcr=E_cA(1+\alpha_E\rho)\epsilon_{t0}=192.47kN$
+                              \par$\Delta l_{tcr}=0.232kN$
+                        \item $N_{tu}=f_yA_s=166.05kN<192.47kN$，超筋
+                              \par极限承载力$N_{tu}=166.05kN$
+                    \end{enumerate}
+              \item 配筋率$\rho=\frac{A_s}{A}=\frac{\pi\cross 11^2\cross 8}{300\cross 8}=3.38\%>3\%$
+                    \par弹性模量比$\alpha_E=\frac{E_s}{E_c}=\frac{1.96\cross10^5}{2.4\cross 10^4}=8.17$
+                    \begin{enumerate}
+                        \item $N_{tu}=f_yA_s=1049.17kN$
+                        \item $\epsilon_{t0}=\frac{f_t}{E_c}=9.58\cross10^{-5}$
+                              $A=A-A_s=86958.94mm^2$
+                              $N_{tcr=E_cA(1+\alpha_E\rho)\epsilon_{t0}=255.24kN}$
+                        \item 根据上述计算结果可知，通常情况下，构件极限抗拉承载力远大于开裂荷载，故在实际使用时许多构件是带裂缝工作的。
+                    \end{enumerate}
+              \item $A_s=\frac{N_t}{f_y}=555.56mm^2$
+                    \par可选用$8\phi10$，此时$A=628mm^2>A_s$
+              \item \begin{enumerate}
+                        \item 配筋率$\rho=\frac{A_s}{A}=\frac{4\cross\frac{25^2}{4}\cross\pi}{400\cross400}=1.23\%<3\%$
+                              \par$N_{cu}=f_y^{\prime}=A_s+f_cA=3740.6kN$
+                        \item $1200>3740.6\cross0.3$
+                              \par$1200000=1000\epsilon(1-250\epsilon)19\cross160000+1.96\cross10^5=357\cross\epsilon$
+                              \par$\epsilon=0.383\cross10^{-3}$，$\Delta l=0.383\cross10^{-3}\cross2000=0.766mm$
+                              \par$N_s^{\prime}=E_s\epsilon A_s=147.40kN$
+                              \par$N_t^{\prime}=1000\epsilon(1-250\epsilon)f_cA=1052.84kN$
+                        \item $\epsilon_i=0.383\cross10^{-3}$
+                              \par$_-t=\frac{\epsilon_{cr}}{\epsilon_i}=2.611$
+                              \par$N_s^{\prime\prime}=E_s(1+C_t)\epsilon_iA_s=532.25kN$
+                              \par$N_t=N-N_s^{\prime\prime}=667.75kN$
+                    \end{enumerate}
+              \item \begin{enumerate}
+                        \item $\rho=\frac{A_s}{A}=\frac{4\cross(\frac{25}{2})^2\cross\pi}{350\cross350}=1.6\%<3\%$
+                              \par$\epsilon=\epsilon_y=\frac{f_y}{E_s}=1.38\cross10^{-3}$
+                              \par$\epsilon=\epsilon_y=\frac{f_y}{E_s}=1.38\cross10^{-3}$
+                              \par$N_c=1000\epsilon(1-250\epsilon)f_cA+f_y^{\prime}A_S^{\prime}=2191.06kN$
+                              \par$\Delta l=\epsilon l=2.76mm$
+                        \item $N_{cu}=f_y^{\prime}A_s^{\prime}+f_cA=2367.64kN$
+                    \end{enumerate}
+              \item \begin{enumerate}
+                        \item $\frac{l_0}{b}=\frac{4.2}{0.25}=16.8$
+                              \par$\varphi=0.846$
+                              \par$A_s^{\prime}>\frac{N-\varphi A f_c}{\varphi f_y}=652.98mm^2$
+                              \par可选用$6\phi12$，$A=678.58mm^2$
+                    \end{enumerate}
+              \item \begin{enumerate}
+                        \item $\rho=\frac{A_s}{A}=\frac{4\cross10^2\cross\pi}{300\cross300}=1.4\%<3\%$
+                              \par$\frac{l_0}{b}=\frac{4700}{300}=15.7$
+                              \par$\varphi=0.878$
+                              \par$N_{cu}=\varphi(f_cA+f_yA_s)=1187.4kN$
+                        \item $\rho=\frac{A_s}{A}=\frac{4\cross10^2\cross\pi}{250\cross250}=2.01\%<3\%$
+                              \par$\rho=\frac{l_0}{b}=18.8$
+                              \par$\varphi=0.786$
+                              \par$N_{cu}=0.786(f_cA+f_yA_s)=846.8kN$
+                    \end{enumerate}
+              \item \begin{align*}
+                        \frac{l_0}{d_c} & =\frac{3500}{450}=7.78<12                                                                                                         \\
+                        N_{cu}          & =f_cA_{cor}+f_y^{\prime}A_s^{\prime}+2f_yA_{ss0}                                                                                  \\
+                        2500000         & =10\cross(\pi\cross(\frac{d_{cor}}{2})^2)+270\cross8\cross11^2\cross\pi+2\cross270\cross\frac{\pi\cross d_{cor}\cross A_{ss1}}{s}
+                    \end{align*}
+                    \par取保护层厚度为$30mm$，则$d_{cor}=390mm$
+                    \par$A_{ss0}=896.89mm^2$，$\frac{A_{ss1}}{s}=0.732$
+                    \par选用$\phi8@70$，$\frac{3.5\cross1000}{70}=50$
+                    \par螺旋箍筋数量为$50$
+              \item $\frac{l_0}{d}=\frac{4000}{500}=8$，$\varphi=1$，$f_c<50N/mm^2$，$\alpha=1$
+                    \par计算螺旋箍筋作用时\begin{align*}
+                        N_{cu} & =f_cA_{cor}+f_y^{\prime}A_s^{\prime}+2f_yA_{ss0}                                                                             \\
+                               & =10\cross(\frac{500-60}{2})^2\cross\pi+380\cross6\cross121\cross\pi+2\cross270\cross\frac{\pi\cross400\cross\pi\cross25}{50} \\
+                               & =3559.7kN
+                    \end{align*}
+                    \par按普通钢筋混凝土柱计算时\begin{align*}
+                        N_{cu} & =\varphi(f_yA_s+f_cA)                                            \\
+                               & =380\cross6\cross121\cross\pi+10\cross(\frac{500}{2})^2\cross\pi \\
+                               & =2830.19kN
+                    \end{align*}
+                    \par由于前者小于后者的1.5倍，所以极限承载力为3559.7kN。
+              \item \begin{align*}
+                        A_{ss0} & =\frac{\pi\cross440\cross\pi\cross16}{80}=868.53mm^2 \\
+                        N_{cu}  & =f_cA+f_y^{\prime}A_s+2f_yA_{ss0}                    \\
+                                & =2856.24kN
+                    \end{align*}
+                    \par极限承载力为2856.24kN。
+          \end{enumerate}
+    \item \begin{enumerate}[1.]
+              \item \begin{enumerate}
+                        \item \begin{align*}
+                                  \rho       & =\frac{A_s}{bh}=9.8\cross10^{-3}       \\
+                                  \rho_{min} & =0.45\frac{f_t}{f_y}=3.28\cross10^{-3} \\
+                                  \rho_{max} & =\xi_b\frac{\alpha_1f_c}{f_y}          \\
+                                  f_{cu}     & <50N/mm^2                              \\
+                                  \xi_b      & =\frac{0.8}{1+\frac{f_y}{0.0033E_s}}   \\
+                                             & =0.516                                 \\
+                                  \rho_{max} & =3.32\cross10^{-2}
+                              \end{align*}
+                              \par该梁为适筋梁
+                              \begin{align*}
+                                  \alpha_E & =\frac{E_s}{E_c}                                                                          \\
+                                           & =7.849                                                                                    \\
+                                  M_{cr}   & =f_tb(h-x_{cr})(\frac{h-x_{cr}}{2}+\frac{2x_cr}{3})+2\alpha_Ef_tA_s(h_0-\frac{x_{cr}}{3}) \\
+                                  h_0      & =600-25-\frac{25}{2}                                                                      \\
+                                           & =562.5mm                                                                                  \\
+                                  \alpha_A & =2\alpha_E\frac{A_s}{bh}                                                                  \\
+                                           & =0.154                                                                                    \\
+                                  M_{cr}   & =0.292(1+2.5\alpha_A)f_tbh^2                                                              \\
+                                  \alpha_A & =2\alpha_e\frac{A_s}{bh}                                                                  \\
+                                           & =0.154                                                                                    \\
+                                  M_{cr}   & =94.63kN\cdot m >50kN\cdot m
+                              \end{align*}
+                              \par截面未开裂
+                              \begin{align*}
+                                  I          & =\frac{bh^3}{12}                   & =4.5\cross10^9mm^4       \\
+                                  \sigma_c^t & =\frac{M_{y0}}{I}                  & =3.33N/mm^2              \\
+                                  \sigma_s   & =\frac{M(h_0-x{cr})}{I}\alpha_E    & =22.89N/mm^2             \\
+                                  \phi       & =\frac{\sigma_c^t}{E_c\frac{h}{2}} & =4.4\cross10^{-7}mm^{-1}
+                              \end{align*}
+                              \item\begin{align*}
+                                  M_{cr}     & =f_tb(h-x_{cr})(\frac{h-x_{cr}}{2}+\frac{2x_{cr}}{3})+2\alpha_Ef_tA_s(h_0-\frac{x_{cr}}{3}) & =93.73kN\cdot m               \\
+                                  x_{cr}     & =\frac{1+\frac{2\alpha_eA_s}{bh}}{1+\frac{\alpha_EA_s}{bh}}\frac{h}{2}                      & =321mm                        \\
+                                  \sigma_s   & =2f_t\alpha_E                                                                               & =40.81N/mm^2                  \\
+                                  \sigma_c^t & =\frac{f_tb(h-x_{cr}+A_s\sigma_s)}{0.5x_{cr}b}                                              & =6.02N/mm^2                   \\
+                                  \phi_{cr}  & =\frac{2f_t}{E_c(h-x_{cr})}                                                                 & =\frac{\sigma_c^t}{E_cx_{cr}} \\
+                                             & =7.47\cross10^{-7}mm^{-1}
+                              \end{align*}
+                    \end{enumerate}
+              \item \begin{enumerate}
+                        \item \begin{align*}
+                                  \xi_n                          & =1.253\rho\frac{f_y}{f_c}   & =0.19                                               \\
+                                  x_n                            & =\xi_nh_0                   & =106.875                                            \\
+                                  \alpha_1f_cbx(h_0-\frac{x}{2}) & =M_u                                                                              \\
+                                  M_u                            & =A_sf_yh_0(1-\frac{\xi}{2}) & =267.5kN\cdot m                                     \\
+                                  \varphi                        & =\frac{\epsilon_u}{x_{cr}}  & =\frac{0.0033}{106.875} & =3.09\cross10^{-5}mm^{-1}
+                              \end{align*}
+                        \item \begin{align*}
+                                  \alpha_1f_cbx & =A_sf_y                                     \\
+                                  x             & =91.39mm                                    \\
+                                  M_u           & =A_sf_y(h_0-\frac{x}{2}) & =271.58kN\cdot m
+                              \end{align*}
+                              \par在梁为适筋梁的情况下，两种方法结果差异不大。
+                    \end{enumerate}
+              \item 受拉钢筋为2$\underline{\phi}12$时，$A_s=226.0mm^2$
+                    \par$\rho=\frac{A_s}{bh}=1.51\cross10^{-3}$，少筋梁
+                    \par$x_cr=\frac{1+\frac{2\alpha_EA_s}{bh}}{1+\frac{\alpha_EA_s}{bh}}$
+                    \par$M_u=f_tb(h-x_{cr})(\frac{h-x_{cr}}{2}+\frac{2x_{cr}}{3})+2f_t\alpha_EA_s(h_0-\frac{x_{cr}}{3})=71.82kN\cdot m$
+                    \par受拉钢筋为$10\underline{\phi}28$时，$A_s=6154mm^2$
+                    \par$\rho=\frac{A_s}{bh}=4.1\cross10^{-2}$，超筋梁
+                    \par$\xi_b=\frac{0.8}{1+\frac{f_y}{0.0033E_s}}=0.516$
+                    \par\begin{align*}
+                        \sigma_s                     & =f_y\frac{\xi-0.8}{\xi_b-0.8}                    \\
+                        \sigma_sA_s(h_0-\frac{x}{2}) & =M_u                                             \\
+                        x                            & =\xi h_0                                         \\
+                        h_0                          & = h-c-d-\frac{d}{2}           & =533mm           \\
+                        \alpha_af_cbx                & =\sigma_sA_s                                     \\
+                        \xi                          & =0.572                                           \\
+                        x                            & =304.87mm                                        \\
+                        \sigma_s                     & =286.6N/mm^2                                     \\
+                        M_u                          & =\sigma_sA_s(h_0-\frac{x}{2}) & =671.22kN\cdot m
+                    \end{align*}
+          \end{enumerate}
+\end{enumerate}
 \end{document}

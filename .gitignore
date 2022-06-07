@@ -22,3 +22,6 @@ build/**
 *.toc
 *.auxlock
 *-figure*.md5
+
+# Python cache
+__pycache__

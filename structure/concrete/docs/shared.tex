@@ -1,0 +1,30 @@
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\usepackage{pgfplots}
+\usepackage{physics}
+\usepackage{biblatex}
+\usepackage{textcomp}
+\usepackage{siunitx}
+\usepackage[UTF8]{ctex}
+
+
+\geometry{a4paper, scale=0.7}
+
+
+\numberwithin{equation}{section}
+\newcommand{\gb}{《混凝土结构设计规范》（GB 50010）}
+\newcommand{\gtgd}{《公路钢筋混凝土及预应力混凝土桥涵设计规范》（JTGD 62-2004）}
+
+\newenvironment{questionList}{
+      \begin{enumerate}
+            \renewcommand{\labelenumi}{\chinese{enumi}、}
+            \renewcommand{\labelenumii}{\arabic{enumii}.}
+            \renewcommand{\labelenumiii}{(\arabic{enumiii})}
+}{
+      \end{enumerate}
+}
+
+\pagenumbering{arabic}

@@ -1,0 +1,3 @@
+[submodule "construction"]
+	path = docs/construction
+	url = ./BasicPrincipleOfCivilEngineeringConstruction.git

@@ -11,17 +11,5 @@ CMakeSettings.json
 out/**
 build/**
 
-# Latex
-*.aux
-*.fdb_latexmk
-*.fls
-*.log
-*.out
-*.synctex.gz
-*.pdf
-*.toc
-*.auxlock
-*-figure*.md5
-
 # Python cache
 __pycache__

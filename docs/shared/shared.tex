@@ -1,5 +1,7 @@
 \usepackage{amsmath}
+\usepackage[UTF8,heading=true]{ctex}
 \usepackage{enumerate}
+\usepackage{gensymb}
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{lmodern}
@@ -8,11 +10,20 @@
 \usepackage{biblatex}
 \usepackage{textcomp}
 \usepackage{siunitx}
-\usepackage[UTF8]{ctex}
+\usepackage{tikz}
+\usepackage{ulem}
 
+\sisetup{
+      range-phrase= \sim{} ,
+      range-units=single,
+      list-separator=、,
+      list-pair-separator=和,
+      list-final-separator=和
+}
 
-\geometry{a4paper, scale=0.7}
+\pgfplotsset{compat=1.18}
 
+\geometry{a4paper, scale=0.8}
 
 \numberwithin{equation}{section}
 \newcommand{\gb}{《混凝土结构设计规范》（GB 50010）}
@@ -23,8 +34,14 @@
             \renewcommand{\labelenumi}{\chinese{enumi}、}
             \renewcommand{\labelenumii}{\arabic{enumii}.}
             \renewcommand{\labelenumiii}{(\arabic{enumiii})}
-}{
+            }{
       \end{enumerate}
+}
+
+\newcommand{\subscript}[2]{
+      \ensuremath{
+            {#1}_{\rm{#2}}
+      }
 }
 
 \pagenumbering{arabic}

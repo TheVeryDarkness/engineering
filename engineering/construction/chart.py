@@ -48,7 +48,7 @@ def __write_process_lines(
             for i_sec, t in proc_per_crew:
                 length = time_cost[i_proc]
 
-                CREW_NAME = f"{i_crew+1}-{i_crew}"
+                CREW_NAME = f"{i_proc+1}-{i_crew+1}"
                 CREW_NAME_WIDTH = len(CREW_NAME) * __FONT_SIZE + __MARGIN
                 X1 = X0 + t * __X
                 X2 = X0 + (t + length) * __X
@@ -203,7 +203,7 @@ def accelerated_beat_flow(
 <text x="{((2+W)/2)*__X}" y="{__Y-__MARGIN}" {__MIDDLE_TEXT_PROP}>施工进度/{UNIT}</text>
             """
         )
-        __write_multiline_text("施工段", __X * 0.5, __Y, __X, __Y * 2, file)
+        __write_multiline_text("施工过程", __X * 0.5, __Y, __X, __Y * 2, file)
         __write_multiline_text("施工队", __X * 1.5, __Y, __X, __Y * 2, file)
         file.write("<!--Horizontal lines-->")
 
@@ -224,7 +224,7 @@ def accelerated_beat_flow(
                 if j < TI:
                     # 施工队名称
                     file.write(
-                        f'<text x="{(3/2)*__X}" y="{i*__Y-__MARGIN}" {__MIDDLE_TEXT_PROP}>{i_section}-{j}</text>'
+                        f'<text x="{(3/2)*__X}" y="{i*__Y-__MARGIN}" {__MIDDLE_TEXT_PROP}>{i_section+1}-{j+1}</text>'
                     )
                 for _j in range(0, K):
                     Y_OFFSET = -__Y / 2 + (__OFFSET if _j % 2 == 0 else -__OFFSET)
@@ -257,7 +257,7 @@ def accelerated_beat_flow(
             file.write(
                 f'<polyline points="0,{(y+Ni)*__Y} {__X*2},{(y+Ni)*__Y}" style="{__LINE_STYLE}"/>'
             )
-            NAME = names[i] if i < len(names) else str(i)
+            NAME = names[i] if i < len(names) else str(i+1)
             __write_multiline_text(
                 NAME, __X / 2, (y + Ni / 2) * __Y, __X, Ni * __Y, file
             )

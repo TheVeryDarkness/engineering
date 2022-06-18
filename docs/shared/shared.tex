@@ -1,17 +1,25 @@
 \usepackage{amsmath}
+\usepackage{biblatex}
 \usepackage[UTF8,heading=true]{ctex}
 \usepackage{enumerate}
+\usepackage[stable]{footmisc}
 \usepackage{gensymb}
 \usepackage{geometry}
-\usepackage{hyperref}
 \usepackage{lmodern}
 \usepackage{pgfplots}
 \usepackage{physics}
-\usepackage{biblatex}
-\usepackage{textcomp}
 \usepackage{siunitx}
+\usepackage{tabularray}
+\usepackage{textcomp}
 \usepackage{tikz}
 \usepackage{ulem}
+\usepackage{xparse}
+\usepackage{xstring}
+
+\usepackage{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+\UseTblrLibrary{booktabs}
 
 \sisetup{
       range-phrase= \sim{} ,
@@ -38,10 +46,27 @@
       \end{enumerate}
 }
 
-\newcommand{\subscript}[2]{
-      \ensuremath{
-            {#1}_{\rm{#2}}
-      }
-}
+\NewDocumentCommand{\script}{mO{}m}{\ensuremath{{#1}^{#2}_{\rm{#3}}}}
+
+\crefname{section}{节}{节}
+\crefname{equation}{式}{式}
 
 \pagenumbering{arabic}
+
+\makeatletter
+\renewcommand{\uline}{\@ifstar{\uline@original}{\uline@for@each}}
+\newcounter{index@string}
+\newcommand{\uline@for@each}[1]{%
+      \phantom{中}\hspace{-1em}%
+      \setcounter{index@string}{0}%
+      \StrLen{#1}[\length@string]%
+      \loop%
+      \stepcounter{index@string}%
+      \StrChar{#1}{\value{index@string}}[\slice@string]%
+      \underline{\slice@string}\hspace{0pt}%
+      \ifnum \value{index@string}<\length@string \repeat%
+}
+\newcommand{\uline@original}[1]{\underline{#1}}
+\makeatother
+
+\SetTblrInner{width=\textwidth}

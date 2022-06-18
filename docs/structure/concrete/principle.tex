@@ -1,14 +1,20 @@
 \documentclass{article}
 
-\include{../shared/shared.tex}
+\input{../../shared/shared.tex}
 
 \begin{document}
 \title{Basic Principle of Concrete Structure}
 \author{H.}
 \maketitle
-\newpage
+\clearpage
 \tableofcontents
-\newpage
+\clearpage
+\section*{符号说明}
+\begin{longtblr}[caption={符号说明},label={tab:Symbol}]{width=\textwidth,colspec={X[c,m]X[c,m]X[c,m]X[c,m]}}
+      b                     & 宽度     & h                     & 高度     \\
+      \script{b}{f}         & 受拉翼缘宽度 & \script{h}{f}         & 受拉翼缘高度 \\
+      \script{b}[\prime]{f} & 受压翼缘宽度 & \script{h}[\prime]{f} & 受压翼缘高度 \\
+\end{longtblr}
 \section{绪论}
 \subsection{混凝土结构的一般概念和特点}
 \subsubsection{钢筋混凝土结构的一般概念}
@@ -272,6 +278,15 @@ $$l_a=\alpha \frac{f_y}{f_t}d$$
 \par 取开裂荷载和极限荷载的最大值。
 \subsubsection{基于承载力的构件截面设计}
 $\rho_{min} = \frac{A_{smin}}{A} \approx \frac{f_t}{f_y}$
+\begin{longtblr}[
+      note{1}={受压构件全部纵向钢筋最小配筋百分率，当复采用C60以上强度等级的混凝土时，应按表中规定增大0.1。},
+      note{2}={板类受弯构件（不包括悬臂板）的受拉钢筋，当采用强度等级\SI{400}{\MPa}、\SI{500}{\MPa}的钢筋时，其最小配筋率应采用0.15和0.45\script{f}{t}/\script{f}{y}中的较大值。},
+      note{3}={偏心受拉构件中的受压钢筋，应按受压构件一侧纵向钢筋考虑。},
+      note{4}={受压构件的全部纵向钢筋和一侧纵向钢筋的配筋率百以及轴心受拉构件和小偏心受拉构件一侧受拉钢筋的配筋率应按构件的全截面面积计算。},
+      note{5}={受弯构件、大偏心受拉构件一侧受拉钢筋的配筋率应按全截面面积扣除受压翼缘面积(\script{b}[\prime]{f}-b)\script{h}[\prime]{f}后的截面面积计算。}
+      ]{width=\textwidth,caption={钢筋混凝土梁中纵向受力钢筋最小配筋率},colspec={X[c,m]X[c,m]X[c,m]X[c,m]}}
+       & 受力类型 &  & 最小配筋百分率 \\
+\end{longtblr}
 \subsection{轴心受压短柱的受力分析}
 \subsubsection{短柱的试验研究}
 \par 屈服前、屈服后直至开裂两个阶段。
@@ -315,27 +330,242 @@ $$
 \subsection{受弯构件正截面性能的试验研究}
 \par 弯矩-曲率关系曲线和荷载-位移关系曲线。
 \subsection{单筋矩形截面受弯构件正截面的受力分析}
+\par 混凝土受拉时采用线弹性-塑性模型。
+\subsection{单筋矩形截面受弯构件正截面承载力的简化分析}\label{sec:SRB}
 \subsubsection{受压区混凝土等效矩形应力图形}
 \par 将宽$b$高$x_n$且应力不均匀的混凝土受压区简化为宽$b$高$x$且应力均匀的混凝土受压区。简化时的假设为受压区顶端位置保持不变，底端位置上移，受压区合力位置、大小不变。
 \par 简化前的受压区最大应力显然为$f_c$，简化后的受压区应力为$\alpha_1f_c$；简化前的受压区高度为$x_n$，简化后的受压区高度为$x=\beta_1x_n$。
 \subsubsection{界限受压区高度}
 \par 假设混凝土压碎时钢筋恰屈服，由几何关系有
-\begin{align}
+\begin{align*}
       \frac{x_n}{h_0-x_n} & = \frac{\varepsilon_{cu}}{\varepsilon_y}                  \\
       \frac{x_n}{h_0}     & = \frac{\varepsilon_{cu}}{\varepsilon_{cu}+\varepsilon_y} \\
                           & = \frac{1}{1+\frac{\varepsilon_y}{\varepsilon_{cu}}}      \\
                           & = \frac{1}{1+\frac{f_y}{E_s\varepsilon_{cu}}}
-\end{align}
+\end{align*}
 记此时的$x_n$为$x_{nb}$，$x$为$x_b$，则
 \begin{align}
       x_b = \beta_1x_{nb}=\frac{\beta_1}{1+\frac{f_y}{E_s\varepsilon_{cu}}}
 \end{align}
-\subsubsection{极限承载力高度}
-\par 受压区合力作用点与受拉钢筋合力作用点的距离为$h_0-x/2$
-\subsection{单筋矩形截面受弯构件正截面承载力的简化分析}
+\subsubsection{极限承载力计算}
+\par 受压区合力作用点与受拉钢筋合力作用点的距离为$h_0-x/2$。
+\par 适筋构件最小配筋率取$\rho=0.45\frac{\script{f}{t}}{\script{f}{y}}$，配筋率小于该值时混凝土开裂后因钢筋强度不足，构件迅速发生脆性破坏。承载力取为混凝土开裂弯矩
+\begin{align*}
+      \script{\alpha}{A} & = 2\script{\alpha}{E}\frac{\script{A}{s}}{bh}     \\
+      \script{M}{cr}     & = 0.292(1+2.5\script{\alpha}{A})\script{f}{t}bh^2
+\end{align*}
+\par 适筋构件最大配筋率取$\script{\rho}{min}=\script{\xi}{b}\frac{\script{\alpha}{1}\script{f}{c}}{\script{f}{y}}$，此时对应的抗弯承载力达到最大，则适筋构件最大抗弯承载力取
+\begin{align*}
+      \script{M}{u,max} & = \script{\alpha}{1}\script{f}{c}b\script{h}[2]{0}\script{\xi}{b}(1-0.5\script{\xi}{b}) \\
+                        & = \script{\alpha}{1}\script{f}{c}b\script{x}{b}(\script{h}{0}-0.5\script{x}{b})
+\end{align*}
+配筋率大于该值时混凝土压碎时受拉钢筋仍未屈服，受拉钢筋应力需另外计算
+\begin{align*}
+      \script{\sigma}{s} & = \script{f}{y} \frac{\xi-0.8}{\script{\xi}{b}-0.8} \\
+\end{align*}
+于是
+\begin{align*}
+      \script{\alpha}{1}\script{f}{c}b\script{h}{0}\xi & = \sigma \script{A}{s}                                         & = \script{f}{y} \script{A}{s} \frac{\xi-0.8}{\script{\xi}{b}-0.8} \\
+      \script{M}{u}                                    & = \script{\sigma}{s} \script{A}{s} (\script{h}{0}-\frac{x}{2})
+\end{align*}
+\par 对于适筋构件
+\begin{align*}
+      \script{\alpha}{1} \script{f}{c} b \script{h}{0} \xi & = \script{f}{y} \script{A}{s}                                                  \\
+      \script{M}{u}                                        & = \script{\alpha}{1} \script{f}{c} b \script{h}{0} \xi \script{h}{0}(1-0.5\xi)
+\end{align*}
 \subsection{单筋矩形截面受弯构件正截面承载力计算公式的应用}
+\begin{enumerate}
+      \item 计算既有构件正截面抗弯承载力时，按\cref{sec:SRB}所述计算。单排配筋时$\script{a}{s}=c+d/2$，$\script{h}{0}=h-c-d/2$；双排配筋时$\script{a}{s}=c+d+\max(25/2, d/2)$。
+      \item 基于承载力设计构件截面时，要保证设计的截面为适筋构件，先计算适筋构件最大承载力$\script{M}{u,max}$，验证所受弯矩不超过该值。再根据$\script{M}{u}\ge{}M$先求出最小的$\xi$或$x$，进而求出\script{A}{s}，再将配筋率与\script{\rho}{min}比较取较大值，防止少筋。对钢筋混凝土梁，单排配筋时取$\script{h}{0}=h-\SI{35}{\mm}$，双排配筋时取$\script{h}{0}=h-\SI{60}{\mm}$；对钢筋混凝土板，取$\script{h}{0}=h-\SI{20}{\mm}$。
+\end{enumerate}
 \subsection{双筋矩形截面受弯构件正截面承载力的受力分析}
 \subsection{双筋矩形截面受弯构件正截面承载力计算公式的应用}
+\begin{enumerate}
+      \item 计算既有构件正截面抗弯承载力：
+            \par 可将受拉钢筋分解为两部分\footnote{一般受拉钢筋强度都足够高。}，使
+            \begin{align*}
+                  \script{A}{s}               & = \script{A}{s1}+\script{A}{s}2              \\
+                  \script{f}{y}\script{A}{s2} & = \script{f}[\prime]{y}\script{A}[\prime]{s}
+            \end{align*}
+            \par 若假定这两部分钢筋都能达到屈服，产生的抵抗力矩为
+            \begin{align*}
+                  \script{M}[\prime]{u} & = \script{f}[\prime]{y}\script{A}[\prime]{s} (\script{h}{0}-\script{a}[\prime]{s})
+            \end{align*}
+            \par 按照\cref{sec:SRB}中单筋矩形截面求$x$。若$x>2\script{a}[\prime]{s}$，可保证对强度等级不大于C50的混凝土和屈服强度标准值不超过\SI{400}{\MPa}的钢筋而言，受压钢筋可达到屈服。否则受压区混凝土中心在受压钢筋合力作用点之外，可偏于安全地简化认为受压区混凝土中心在受压钢筋合力作用点处，于是
+            \begin{align*}
+                  \script{M}{u} & = \script{f}{y}\script{A}{s}(\script{h}{0}-\script{a}[\prime]{s})
+            \end{align*}
+            \par 否则对\script{A}{s1}这部分受拉钢筋，按照单筋矩形截面承载力计算\script{M}{u1}，实际承载力$\script{M}{u}=\script{M}{u1}+\script{M}[\prime]{u}$。
+      \item 基于承载力设计构件截面受压及受拉钢筋：
+            \par 为充分利用截面，令$x=\script{\xi}{b}\script{h}{0}$。
+            \begin{align*}
+                  \script{A}{s1} & = \frac{\script{\alpha}{1}\script{f}{c}bx}{\script{f}{y}} \\
+                  \script{M}{u1} & = \script{f}{y}\script{A}{s1}(\script{h}{0}-x/2)
+            \end{align*}
+            所受弯矩$M$通常小于$\script{M}{u1}$，于是
+            \begin{align*}
+                  \script{M}[\prime]{u} & = M-\script{M}{u1}                                                  \\
+                  \script{A}{s2}        & = \frac{\script{M}[\prime]{u}}{\script{f}{y}-\script{a}[\prime]{s}} \\
+                  \script{A}{s}         & = \script{A}{s1}+\script{A}{s2}                                     \\
+                  \script{A}[\prime]{s} & = \frac{\script{f}{y}\script{A}{s1}}{\script{f}[\prime]{y}}
+            \end{align*}
+      \item 基于承载力设计构件截面受拉钢筋：
+            \par 先假定受压钢筋均达到屈服：
+            \begin{align*}
+                  \script{A}{s2} & = \frac{\script{f}[\prime]{y}\script{A}[\prime]{s}}{\script{f}{y}} \\
+                  \script{M}{u2} & = \script{f}[\prime]{y}\script{A}[\prime]{s}                       \\
+                  \script{M}{u1} & = M-\script{M}{u2}
+            \end{align*}
+            根据\script{M}{u1}按照单筋矩形截面计算$x$。若$x<2\script{a}[\prime]{s}$，按照单筋矩形截面计算受拉钢筋截面面积\script{A}{s}，并验算最小配筋率；否则，若$x<\script{x}{b}$，按照单筋矩形截面计算部分受拉钢筋截面面积\script{A}{s1}，并相加得到受拉钢筋截面面积$\script{A}{s}=\script{A}{s1}+\script{A}{s2}$；否则忽略受压钢筋重新设计。
+\end{enumerate}
+\subsection{T形截面受弯构件正截面的受力分析}
+\par 受压翼缘计算宽度需要折减，最大宽度如\cref{tab:bf_prime}所示。
+\begin{longtblr}[caption={最大受压翼缘受压宽度},label={tab:bf_prime}]{width=\textwidth,colspec={X[c,m]X[c,m]X[c,m]X[c,m]}}
+      \toprule
+      情况                           & T形、I形截面肋形梁、板              & T形、I形截面独立梁      & 倒L形截面                    \\
+      \midrule
+      按计算跨度\script{l}{0}考虑         & \script{l}{0}/3           & \script{l}{0}/3 & \script{l}{0}/6          \\
+      按梁（纵肋）净距\script{s}{n}考虑      & b+\script{s}{n}           & --              & b+\script{s}{n}/2        \\
+      按翼缘高度\script{h}[\prime]{f}考虑 & b+12\script{h}[\prime]{f} & b               & b+5\script{h}[\prime]{f} \\
+      \bottomrule
+\end{longtblr}
+\par 按照（简化后的）受压区是否全部位于受压翼缘中\footnote{$x<\script{h}[\prime]{f}<\script{x}{n}$时实际上是有误差的，但这一部分通常比较小，不大于$\script{\varepsilon}[t]{c}\frac{b(\script{x}{n}-\script{b}[\prime]{f})^2}{2\script{x}{n}}$。}，可分为两类T形截面。第一类T形截面承受弯矩增大时也可能转化为第二类T形截面，判断第一类T形截面的条件有两种，满足其一即可，分别为：
+\begin{align*}
+      \script{f}{y}\script{A}{s} & \le \script{\alpha}{1}\script{f}{c}\script{b}[\prime]{f}\script{h}[\prime]{f}                                                 \\
+      M                          & \le \script{\alpha}{1}\script{f}{c}\script{b}[\prime]{f}\script{h}[\prime]{f} (\script{h}{0}-\frac{\script{h}[\prime]{f}}{2})
+\end{align*}
+\par 第一个判据与外部荷载无关，实际上是用于适筋构件的极限状态，可用于计算构件承载力；第二个判据则是用于基于承载力的构件截面设计。
+\par 对第一类T形截面，适筋构件的极限状态与截面尺寸$\script{b}[\prime]{f}\times{}h$的单筋矩形截面相同，即满足
+\begin{align*}
+      \script{\alpha}{1}\script{f}{c}\script{b}[\prime]{f}x & = \script{f}{y}\script{A}{s}                                                       \\
+      \script{M}{u}                                         & = \script{\alpha}{1}\script{f}{c}\script{b}[\prime]{f}x(\script{h}{0}-\frac{x}{2})
+\end{align*}
+第一类T形截面一般不需要验算超筋，但需要验算少筋，最小配筋率与矩形截面计算方法相同，但由于开裂部分在腹板上，开裂弯矩与截面尺寸$\script{b}[\prime]{f}\times{}h$的矩形截面基本相等，验算时应满足
+\begin{align*}
+      \script{A}{s} \ge \script{\rho}{min}bh
+\end{align*}
+\par 对第二类T形截面，可以将截面分解为两部分，即满足
+\begin{align*}
+                    & \script{\alpha}{1}\script{f}{c}bx + \script{\alpha}{1}\script{f}{c}(\script{b}[\prime]{f}-b)x & = \script{f}{y}\script{A}{s}                                                                                                                                            \\
+      \script{M}{u} & = \script{M}{u1}+\script{M}[\prime]{uf}                                                       & = \script{\alpha}{1}\script{f}{c}bx(\script{h}{0}-\frac{x}{2})+\script{\alpha}{1}\script{f}{c}(\script{b}[\prime]{f}-b)x(\script{h}{0}-\frac{\script{h}[\prime]{f}}{2})
+\end{align*}
+一般第二类T形截面不会出现少筋破坏，但仍需验算$\script{A}{s}\ge{}\script{\rho}{min}bh$。为保证不发生超筋破坏，应满足下列条件之一
+\begin{align*}
+      \xi           & \le \script{\xi}{b}                                                                                             \\
+      \script{M}{1} & \le \script{M}{u,max} & = \script{\alpha}{1}\script{f}{c}b\script{h}[2]{0}\script{\xi}{b}(1-0.5\script{\xi}{b})
+\end{align*}
+\subsection{T形截面受弯构件正截面承载力计算公式的应用}
+\begin{enumerate}
+      \item 计算既有构件正截面抗弯承载力：
+            \par 先判断截面类型。
+            \par 对第一类T形截面，注意若为少筋，需要按照开裂弯矩计算承载力，否则按照截面尺寸$\script{b}[\prime]{f}\times{}h$的矩形截面计算。
+            \par 对第二类T形截面，先求出受压翼缘部分的承载力\script{M}[\prime]{uf}，再按截面尺寸$b\times{}h$的矩形截面计算另一部分承载力\script{M}{u1}，相加得到总的承载力。
+      \item 基于承载力设计构件截面：
+            \par 对第一类T形截面，按照截面尺寸$\script{b}[\prime]{f}\times{}h$的矩形截面进行设计，并验算少筋。
+            \par 对第二类T形截面，先分解出受压翼缘和一部分与受压翼缘强度匹配的受拉钢筋$\script{A}{s2}=\script{\alpha}{1}\script{f}{c}(\script{b}[\prime]{f}-b)\script{h}[\prime]{f}/\script{f}{y}$，这部分承载力为$\script{M}[\prime]{}=\script{A}{s2}\script{f}{y}(\script{h}{0}-\frac{\script{h}[\prime]{f}}{2})$。
+            \par 根据剩余的弯矩$\script{M}{1}=M-\script{M}[\prime]{}$，按矩形截面计算$x$。
+            \par 若$x\le\script{x}{b}$，按照矩形截面适筋构件计算$\script{A}{s1}$，总的受拉钢筋截面面积为$\script{A}{s}=\script{A}{s1}+\script{A}{s2}$；否则重新设计截面尺寸或在受压翼缘内布置受压钢筋。
+\end{enumerate}
+\subsection{深受弯构件正截面的受力分析}
+\subsection{受弯构件正截面的延性}
+\section{偏心受力构件正截面的性能与计算}
+\subsection{工程应用实例及构件的配筋形式}
+\par 一般翼缘厚度不宜小于\SI{120}{mm}，腹板厚度不宜小于\SI{100}{mm}。
+\subsection{轴力-弯矩相关曲线}
+\subsection{偏心受压构件的试验研究}
+\par 偏心受压构件有两种典型的破坏形态：受压破坏或小偏心受压破坏；受拉破坏或大偏心受压破坏。
+\par 偏心受压构件在轴向荷载下会产生横向挠度，实际弯矩大于初始弯矩。
+\subsection{有关偏心受压构件分析计算中的两个问题}
+\par 实际初始偏心距$\script{e}{i}=\script{e}{0}+\script{e}{a}$，$\script{\eta}{s}=1+\frac{1}{1300\frac{\script{e}{i}}{\script{h}{0}}}(\frac{\script{l}{0}}{h})^2\script{\zeta}{c}$（$\script{h}{0}/h\le5$时可直接取1），$\script{\zeta}{c}=\frac{0.5\script{f}{c}A}{\script{N}{c}}$（\script{\zeta}{c}大于1.0时取1.0），对T形或I形截面，$A=bh+2(\script{b}[\prime]{f}-b)\script{h}[\prime]{f}$。
+\par \sc
+\subsection{矩形截面偏心受压构件正截面的受力分析}
+\par 外力作用点与受拉钢筋的距离$e=\script{\eta}{s}\script{e}{i}+h/2-\script{a}{s}$。
+\par 大偏心受压与小偏心受压之间的界限相对高度仍为$\script{\xi}{b}=\frac{\script{\beta}{1}}{1+\frac{\script{f}{y}}{\script{E}{s}\script{\varepsilon}{cu}}}$。
+\par 大偏心受压时
+\begin{align}
+      \script{N}{cu}  & = \script{\alpha}{1}\script{f}{c}bx+\script{f}[\prime]{y}\script{A}[\prime]{s}-\script{f}{y}\script{A}{s}                                                \\
+      \script{N}{cu}e & = \script{\alpha}{1}\script{f}{c}bx(\script{h}{0}-x/2)+\script{f}[\prime]{y}\script{A}[\prime]{s}(\script{h}{0}-\script{a}[\prime]{s})\label{eq:大偏心受压力矩}
+\end{align}
+\par 小偏心受压时
+\begin{align}
+      \script{N}{cu}     & = \script{\alpha}{1}\script{f}{c}bx+\script{f}[\prime]{y}\script{A}[\prime]{s}-\script{\sigma}{s}\script{A}{s}                                            \\
+      \script{N}{cu}e    & = \script{\alpha}{1}\script{f}{c}bx(\script{h}{0}-x/2)+\script{f}[\prime]{y}\script{A}[\prime]{s}(\script{h}{0}-\script{a}[\prime]{s}) \label{eq:小偏心受压力矩} \\
+      \script{\sigma}{s} & = \script{f}{y}\frac{0.8-\xi}{0.8-\script{\xi}{b}}
+\end{align}
+\subsection{矩形截面偏心受压构件正截面承载力计算公式的应用}
+\par 对于对称配筋偏心受压构件，
+\begin{align}
+      \xi            & = \frac{\script{N}{c}}{\script{\alpha}{1}\script{f}{c}b\script{h}{0}} \\
+      \script{N}{cb} & = \script{\alpha}{1}\script{f}{c}b\script{h}{0}\script{\xi}{b}
+\end{align}
+\par 设计时先判断受力状态。
+\par 对大偏心受压，$x>2\script{a}[\prime]{s}$时可以直接根据力矩平衡（\cref{eq:大偏心受压力矩}）计算配筋，否则偏于安全地取受压区中心为受压钢筋合力作用点，得$\script{A}{s}=\frac{N\script{e}[\prime]{}}{\script{f}{y}(\script{h}{0}-\script{a}[\prime]{s})}$。
+\par 对小偏心受压，需要重新计算$\xi$\footnote{考试大概会给吧……}，并按\cref{eq:小偏心受压力矩}求出配筋。
+\par 除此之外，偏心受压构件还需验算最小配筋率，并按照轴心受压构件进行复核。
+\subsection{I形截面偏心受压构件正截面受力分析}
+\subsection{I形截面偏心受压构件正截面承载力计算公式的应用}
+\subsection{双向偏心受压构件正截面受力分析}
+\subsection{圆形截面偏心受压构件正截面受力分析}
+\subsection{偏心受拉构件偏心受压构件正截面受力分析}
+\subsection{偏心受拉构件偏心受压构件正截面承载力计算公式的应用}
+\section{构件斜截面的性能与计算}
+\subsection{工程应用实例及配筋形式}
+\subsection{钢筋混凝土受弯构件的抗剪性能}
+\par 有腹筋梁的破坏形态包括剪压破坏、斜压破坏（$\lambda<1$）和斜拉破坏（$\lambda>3$）对应的强度。
+\begin{align}
+      \script{V}{c}     & = \left\{
+      \begin{array}{lll}
+             & 0.7\script{f}{t}b\script{h}{0}                    & , \footnote{均布荷载}                                 \\
+             & \frac{1.75}{\lambda+1}\script{f}{t}b\script{h}{0} & , \footnote{集中荷载或集中荷载对支座截面或节点边缘产生的剪力值占总剪力值75\%以上}
+      \end{array}
+      \right.                                                                   \\
+      \script{V}{s}     & = \script{f}{yv}\frac{\script{A}{sv}}{s}\script{h}{0} \\
+      \script{V}{b}     & = 0.8\script{f}{y}\script{A}{sb}\sin{\alpha}          \\
+      \script{V}{u}     & =  \script{V}{c} + \script{V}{s} + \script{V}{b}      \\
+      \script{V}{u,max} & = \left\{
+      \begin{array}{lll}
+             & 0.25 \script{\beta}{c}\script{f}{c}b\script{h}{0}                             & , \script{h}{w}/b \le 4   \\
+             & 0.2 \script{\beta}{c}\script{f}{c}b\script{h}{0}                              & , \script{h}{w}/b \ge 6   \\
+             & (0.35-\frac{\script{h}{w}}{40b}) \script{\beta}{c}\script{f}{c}b\script{h}{0} & , 4 < \script{h}{w}/b < 6
+      \end{array}
+      \right.
+\end{align}
+\subsection{钢筋混凝土受弯构件斜截面抗剪承载力计算公式的应用}
+\par 注意箍筋最大间距
+\begin{longtblr}[caption={箍筋最大间距},label={tab:s}]{width=\textwidth,colspec={X[c,m]X[c,m]X[c,m]}}
+      \toprule
+      h/\unit{\mm}  & $V>\script{V}{c}$ & $V\le\script{V}{c}$ \\
+      \midrule
+      $150<h\le300$ & 150               & 200                 \\
+      $300<h\le500$ & 200               & 300                 \\
+      $500<h\le800$ & 250               & 350                 \\
+      $800<h$       & 300               & 400                 \\
+      \bottomrule
+\end{longtblr}
+\begin{longtblr}[caption={箍筋最小直径},label={tab:svd}]{width=\textwidth,colspec={X[c,m]X[c,m]}}
+      \toprule
+      s/\unit{\mm} & $\script{d}{sv}$ \\
+      \midrule
+      $h\le800$    & 6                \\
+      $800<h$      & 8                \\
+      \bottomrule
+\end{longtblr}
+\subsection{保证钢筋混凝土受弯构件斜截面抗剪承载力的措施}
+\subsection{偏心受力构件的抗剪性能}
+\subsection{钢筋混凝土偏心受力构件斜截面抗剪承载力计算公式的应用}
+\subsection{钢筋混凝土深受弯构件及墙体的抗剪性能}
+\subsection{新旧混凝土之间的剪力传递}
+\section{构件扭曲截面的性能与计算}
+\subsection{工程实例及受扭构件的配筋形式}
+\subsection{纯扭构件的试验研究结果}
+\subsection{纯扭构件的开裂扭矩}
+\subsection{矩形截面纯扭构件抗扭承载力计算}
+\subsection{I形、T形及箱形截面纯扭构件抗扭承载力计算}
+\subsection{纯扭构件抗扭承载力计算公式的应用}
+\subsection{弯剪扭构件的试验研究结果}
+\subsection{弯剪扭构件截面的承载力}
+\subsection{弯剪扭构件承载力计算公式的应用}
+\subsection{有轴向力作用时构件扭曲截面的承载力计算}
 \appendix
 \newpage
 %\newcommand{\ans}{\setlength{\par indent}{-2em}\par 答：\setlength{\par indent}{0em}}
@@ -617,5 +847,54 @@ $$
       \end{enumerate}
       \setcounter{enumi}{9}
       \item \include{9/main.tex}
+\end{questionList}
+\section{讨论题}
+\begin{questionList}
+      \item 在钢筋混凝土轴心受压短柱试验中，钢筋和混凝土的应力随荷载增加各如何变化？并作解释。
+      \ans 从加载到破坏，短柱的受力过程分为两个阶段：
+      \begin{enumerate}
+            \item 开始加载到钢筋屈服为第一阶段，钢筋应力增长快。
+            \item ​钢筋屈服到混凝土被压碎为第二阶段，钢筋应力基本上不再增加，混凝土应力继续增加；由于混凝土的非线性，使得相对而言应变增长较应力增加速率更快。
+      \end{enumerate}
+      \item 软钢（如低碳钢\footnote{一定要记住一般说来含碳量越高塑性越差。}）和硬钢（如高碳钢）的应力—应变关系曲线有何不同？它们的屈服强度是如何取值的？
+      \ans 软钢的应力-应变曲线中，有明显的屈服平台和流幅。在应力到达屈服点之前，应力与应变呈线性比例关系。在应力到达屈服平台时，应力几乎不增加，应变却可以增加很多；进入强化阶段后，应变增大，应力也会相对较慢地增加，但增长的值不小；当应力到达极限强度之后，应变迅速增加，钢材出现”颈缩“现象，应力随之下降直至断裂。
+      \par 硬钢的应力应变曲线中，看不到明显的屈服点和流幅。
+      \par 在屈服强度的取值时，软钢取屈服平台时的强度作为屈服强度；硬钢一般取残余应变0.2\%时所对应的应力（不大于极限抗拉强度的85\%）作为屈服强度。
+      \item 混凝土标号C40的含义？
+      \ans 按混凝土立方体抗压强度标准实验（非标准试验需要换算）测得的具有95\%保证率抗压强度（即立方体抗压强度标准值\script{f}{cu,k}）大于\SI{40}{\MPa}的混凝土。
+      \item 混凝土梁的设计时为何要限制最大配筋率 ？如何确定最大配筋率 ？
+      \ans 控制最大配筋率是为了避免梁出现超筋破坏；最大配筋率计算公式ρmax=ξ(b)f(c)/f(y)，结构设计的时候要满足最大配筋率的要求,当构件配筋超过最大配筋率时塑性变小,不利于抗震
+      \item 控制最大配筋率是为了避免梁出现超筋破坏。
+      \ans 最大配筋率计算公式$\script{\rho}{max} = \script{\xi}{b} \script{f}{c} / \script{f}{y}$，而$\script{\xi}{b} = \script{\beta}{1}/(1+\script{f}{y}/(\script{E}{s}\script{\varepsilon}{cu}))$。
+      \par 当构件配筋超过最大配筋率时其破坏没有外表可见的明显预兆，为脆性破坏，不便对存在隐患的构件进行筛查；配筋率越大，延性越小，不利于抗震。
+      \item 确定基本锚固长度的原则是什么？
+      \ans 确定锚固长度的基本原则是在钢筋受力屈服时正好发生锚固破坏。
+      \par 通常是将钢筋在混凝土中延伸一段长度来实现钢筋与混凝土之间的锚固，此延伸长度称为钢筋的锚固长度，最小的锚固长度就是钢筋屈服时的传递长度，或称钢筋应力达到屈服强度时的发展长度。
+      \item 分别解释钢筋传递长度和锚固长度。
+      \ans 传递长度：钢筋通过粘结作用把加于其上的拉力T传递给混凝土所需要的粘结长度；
+      \par ​锚固长度：为保证二者之间的锚固，使钢筋在混凝土中延伸的长度。
+      \par 锚固长度与外力无关。传递长度主要用于分析粘结作用大小，一般即使已知拉力大小也会使延伸长度达到锚固长度。
+      \item 混凝土的徐变和收缩对钢筋混凝土构件的受力状态各有何影响？
+      \ans 徐变：
+      \begin{enumerate}
+            \item 梁部混凝土受压区的混凝土徐变收缩，相当于混凝土弹性模量降低，引起梁体挠度增大；
+            \item 徐变会增大偏心受压柱的弯曲,增大初偏心，从而降低承载能力；
+            \item 导致预应力混凝土构件的预应力损失；
+            \item 对组合截面的构件(含不同材料组合截面,如钢筋混凝土组合截面,或不同龄期混凝土组合截面等)，徐变会使截面间应力重分布；
+            \item 对超静定结构，混凝土徐变会导致结构内力重分布,即徐变次内力；
+            \item 在混凝土局部应力较大处，徐变可降低应力峰值；
+      \end{enumerate}
+      \par 收缩：
+      \begin{enumerate}
+            \item 由于收缩时内外不同步，容易引起构件外表面裂缝等。
+      \end{enumerate}
+      \item 确定钢筋混凝土梁中纵向受力钢筋最小配筋率的原则是什么？
+      \ans 保证所设计截面的极限承载力大于截面的极限弯矩，避免在极限状态下出现脆性破坏；实际应用中不同规范可能对\script{\rho}{min}作适当调整。
+      \item 钢筋混凝土梁正截面的破坏形态有哪些？对应每种破坏形态的破坏特征是什么？
+      \ans 少筋破坏：混凝土受拉区开裂后，拉应力由受拉钢筋承担，但受拉钢筋强度不足，立即屈服，构件破坏，没有预兆，属于脆性破坏；
+      \par 适筋破坏：混凝土受拉区开裂后，拉应力由受拉纵筋承担，最后混凝土受压区压碎，构件破坏，有明显的变形和预兆，属于延性破坏；
+      \par 超筋破坏：混凝土受拉区开裂后，混凝土受压区压碎时，钢筋仍未屈服，随即破坏，属于脆性破坏。
+      \item 钢筋混凝土轴心受压构件在长期荷载作用下，随着荷载作用时间的增长，钢筋的应力和混凝土的应力各发生什么变化？混凝土的徐变是否会影响短柱的承载力？
+      \ans 轴心受压构件在不变荷载的长期作用下，由于混凝凝土的徐变影响，其压缩变形将随时间的增加而增大，由于混凝土和钢筋共同作用，混凝土徐变还将使钢筋的变形随之增大，钢筋的应力相应地增大，从而使钢筋分担外荷载的比例增大；并且通常会在混凝土中产生拉应力，纵向受压钢筋越多，拉应力越大，严重的会产生水平裂缝；钢筋强度较低时承载力并不一定增大，但钢筋强度大于\SI{400}{\MPa}时承载力可能会增大。
 \end{questionList}
 \end{document}

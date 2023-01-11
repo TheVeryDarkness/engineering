@@ -1,7 +1,7 @@
 from functools import reduce
 from itertools import repeat
 from math import ceil, floor, gcd
-from typing import Generator, TextIO
+from typing import Generator, Literal, TextIO
 import roman
 
 
@@ -10,6 +10,7 @@ __Y = 60
 __FONT_SIZE = 20
 __MARGIN = 15
 __OFFSET = 8
+__FILLED_POLYGON_STYLE = "stroke:rgb(0,0,0);stroke-width:1;"
 __LINE_STYLE = "stroke:rgb(0,0,0);stroke-width:2;fill:none;"
 __TEXT_PROP = f'font-size="{__FONT_SIZE}"'
 __MIDDLE_TEXT_PROP = f'text-anchor="middle" {__TEXT_PROP}'
@@ -18,6 +19,7 @@ __LEFT_TEXT_PROP = f'text-anchor="end" {__TEXT_PROP}'
 __VERTICAL_TEXT_PROP = f'style="writing-mode: tb; glyph-orientation-vertical: 0; text-orientation: upright;"'
 __CIRCLE_PROP = f'style="fill: none; stroke: black;"'
 __EXTRA_Y_OFFSET = 2
+__SKIP = 5
 
 
 def __add_append(l: list[int], i: int):
@@ -37,6 +39,25 @@ def __collect_not_none(
                 res.append(item)
     except StopIteration as e:
         return res
+
+
+def __write_filled_polygon(
+    X0: int | float,
+    Y0: int | float,
+    points: list[tuple[int | float, int | float]],
+    pattern: Literal["vertical"] | Literal["horizontal"],
+    file: TextIO,
+    stroke: tuple[int, int],
+):
+    file.write(f'<polyline points="')
+    for x, y in points:
+        X = X0 + x * __X
+        Y = Y0 + y * __Y
+        file.write(f"{X},{Y} ")
+    file.write(f"{X0+points[0][0]*__X},{Y0+points[0][1]*__Y} ")
+    file.write(
+        f'" fill="url(#{pattern})" style="{__FILLED_POLYGON_STYLE}" stroke-dasharray="{stroke[0]} {stroke[1]}"/>'
+    )
 
 
 def __write_process_lines(
@@ -72,48 +93,90 @@ def __write_process_lines(
                         """
                     )
         if draw_dash:
+            file.write(
+                f"""
+<!--Fill-->
+<pattern id="vertical" width="{__SKIP}" height="{__SKIP}" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="0" x2="0" y2="{__SKIP}" style="stroke:black; stroke-width:1" />
+</pattern>
+<pattern id="horizontal" width="{__SKIP}" height="{__SKIP}" patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="0" x2="0" y2="{__SKIP}" style="stroke:black; stroke-width:1" />
+</pattern>
+            """
+            )
             for i_proc, proc in enumerate(data):
                 if i_proc == 0:
                     continue
                 for i_crew, sec_per_crew in enumerate(proc):
+                    points: list[tuple[int | float, int | float]] = []
+                    _PREV_LAST = (
+                        data[i_proc - 1][i_crew][m - 1][1]
+                        + time_cost[i_proc - 1][m - 1]
+                    )
+                    _THIS_LAST = (
+                        data[i_proc][i_crew][m - 2][1] + time_cost[i_proc][m - 2]
+                    )
+                    points.insert(
+                        0,
+                        (
+                            _PREV_LAST,
+                            0,
+                        ),
+                    )
+                    points.append((_THIS_LAST, 0))
                     for i_sec, t in reversed(sec_per_crew):
                         length = time_cost[i_proc][i_sec]
                         if i_sec + 1 == m:
                             continue
                         PREV = data[i_proc - 1][i_crew][i_sec + 1][1]
                         assert i_sec + 1 == m or PREV <= t
-                        X1 = X0 + t * __X
-                        X2 = X0 + (t + length) * __X
-                        Y1 = Y0 + (m - i_sec) * __Y
-                        Y2 = Y0 + (m - i_sec - 1) * __Y
-                        file.write(
-                            f"""
-                            <polyline points="{X1},{Y1-__Y} {X2},{Y2-__Y}" style="{__LINE_STYLE}" stroke-dasharray="2 3"/>
-                            """
-                        )
+                        points.insert(0, (PREV, m - i_sec - 1))
+                        points.append((t, m - i_sec - 1))
                         if PREV == t:
                             break
+                    if len(points) > 2 and _THIS_LAST != _PREV_LAST:
+                        length = time_cost[i_proc][m - 2]
+                        __write_text(
+                            "上临界位置",
+                            X0 + (_THIS_LAST - length / 2) * __X,
+                            Y0 + __Y / 2 + __FONT_SIZE / 2 + __EXTRA_Y_OFFSET,
+                            file,
+                        )
+                    __write_filled_polygon(X0, Y0, points, "vertical", file, (2, 3))
+
             for i_proc, proc in enumerate(data):
                 if i_proc + 1 == n:
                     continue
                 for i_crew, sec_per_crew in enumerate(proc):
+                    points = []
+                    _NEXT_FIRST = data[i_proc + 1][i_crew][0][1]
+                    _THIS_FIRST = data[i_proc][i_crew][1][1]
+                    points.insert(
+                        0,
+                        (
+                            _NEXT_FIRST,
+                            m,
+                        ),
+                    )
+                    points.append((_THIS_FIRST, m))
                     for i_sec, t in sec_per_crew:
                         length = time_cost[i_proc][i_sec]
                         if i_sec == 0:
                             continue
                         NEXT = data[i_proc + 1][i_crew][i_sec - 1][1]
                         assert i_sec + 1 == m or t <= NEXT
+                        points.insert(0, (NEXT, m - i_sec + 1))
+                        points.append((t, m - i_sec + 1))
                         if NEXT == t:
                             break
-                        X1 = X0 + t * __X
-                        X2 = X0 + (t + length) * __X
-                        Y1 = Y0 + (m - i_sec) * __Y
-                        Y2 = Y0 + (m - i_sec - 1) * __Y
-                        file.write(
-                            f"""
-                            <polyline points="{X1},{Y1+__Y} {X2},{Y2+__Y}" style="{__LINE_STYLE}" stroke-dasharray="2 3"/>
-                            """
+                    if len(points) > 4:
+                        __write_text(
+                            "下临界位置",
+                            X0 + _THIS_FIRST * __X,
+                            Y0 + m * __Y - __EXTRA_Y_OFFSET,
+                            file,
                         )
+                    __write_filled_polygon(X0, Y0, points, "horizontal", file, (6, 7))
 
     else:
         y = 3
@@ -285,17 +348,28 @@ def __write_chart(
                 """
                 )
                 # 施工队名称
-                file.write(
-                    f'<text x="{(3/2)*__X}" y="{(_y+1)*__Y-__MARGIN}" {__MIDDLE_TEXT_PROP}>{roman.toRoman(i_process+1)}-{i_crew+1}</text>'
+                __write_text(
+                    f"{roman.toRoman(i_process+1)}-{i_crew+1}",
+                    (3 / 2) * __X,
+                    (_y + 0.5) * __Y + __FONT_SIZE / 2,
+                    file,
                 )
+            # 施工过程名称
+            X_PROC = __X / 2
+            Y_PROC = (y + Ni / 2) * __Y
             if i_process < len(names):
                 NAME = names[i_process]
                 __write_multiline_text(
-                    NAME, __X / 2, (y + Ni / 2) * __Y, __X, Ni * __Y, file
+                    NAME,
+                    X_PROC,
+                    Y_PROC,
+                    __X,
+                    Ni * __Y,
+                    file,
                 )
             else:
                 NAME = roman.toRoman(i_process + 1)
-                __write_text(NAME, __X / 2, (y + Ni / 2) * __Y, file)
+                __write_text(NAME, X_PROC, Y_PROC + __FONT_SIZE / 2, file)
             i += Ni
         i = None
 
@@ -329,9 +403,12 @@ def __write_chart(
             )
 
         file.write("<!--Border-->")
-        # 图表右边界
+        # 图表下、右边界
         file.write(
-            f'\n<polyline points="{WIDTH},{HEIGHT} {WIDTH},0" style="{__LINE_STYLE}"/>'
+            f"""
+            <polyline points="{WIDTH},{HEIGHT} {WIDTH},0" style="{__LINE_STYLE}"/>
+            <polyline points="0,{HEIGHT} {WIDTH},{HEIGHT}" style="{__LINE_STYLE}"/>
+            """
         )
 
     file.write("<!--End-->")
